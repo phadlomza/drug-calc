@@ -2,195 +2,341 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drug Dosing — Obese Pediatric</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Obese Peds Dose Calc</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f4f1ec; --surface: #fffdf9; --surface2: #f0ede6; --border: #d6d0c4;
-  --text: #1a1714; --text2: #6b6560; --text3: #9e9890;
-  --accent: #c0392b; --blue: #1a5f8a; --blue-soft: #e8f2f8;
-  --green: #2a7a4a; --green-soft: #e8f5ee; --amber: #b8690a; --amber-soft: #fef3e2;
-  --purple: #6b3fa0; --purple-soft: #f3eefb;
-  --radius: 10px; --radius-lg: 16px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+:root{
+  --bg:#f4f1ec;--surface:#fffdf9;--s2:#f0ede6;--border:#d6d0c4;
+  --text:#1a1714;--t2:#6b6560;--t3:#9e9890;
+  --red:#c0392b;--blue:#1a5f8a;--bsoft:#e8f2f8;
+  --green:#2a7a4a;--gsoft:#e8f5ee;--amber:#b8690a;--asoft:#fef3e2;
+  --purple:#6b3fa0;--psoft:#f3eefb;
+  --r:10px;--rlg:16px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%;}
 
-.app-header { background: var(--text); color: white; padding: 16px 20px; position: sticky; top: 0; z-index: 100; }
-.app-header h1 { font-size: 16px; font-weight: 600; }
-.app-header p { font-size: 12px; opacity: 0.5; margin-top: 2px; }
+/* header */
+.hdr{background:var(--text);color:white;padding:14px 18px;position:sticky;top:0;z-index:200;}
+.hdr h1{font-size:16px;font-weight:600;}
+.hdr p{font-size:11px;opacity:.45;margin-top:1px;}
 
-.container { max-width: 520px; margin: 0 auto; padding: 14px; }
+/* bottom nav */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);
+  display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0px);}
+.bn{flex:1;padding:10px 0 8px;font-size:11px;font-weight:500;font-family:'Sarabun',sans-serif;
+  border:none;background:transparent;color:var(--t3);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;}
+.bn.on{color:var(--blue);}
 
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
-.card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.card-title::before { content: ''; display: block; width: 3px; height: 14px; border-radius: 2px; background: var(--accent); }
+.page{display:none;padding:14px 14px 84px;}
+.page.on{display:block;}
+.wrap{max-width:500px;margin:0 auto;}
 
-.field { margin-bottom: 12px; }
-.field label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
-.field input, .field select { width: 100%; padding: 10px 12px; font-size: 15px; font-family: 'Sarabun', sans-serif; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2); color: var(--text); -webkit-appearance: none; }
-.field input:focus, .field select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,95,138,0.1); }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);
+  padding:18px;margin-bottom:12px;box-shadow:var(--sh);}
+.ct{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--t2);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.ct::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--red);}
 
-.gender-wrap { display: flex; gap: 8px; }
-.gender-btn { flex: 1; padding: 9px; font-size: 14px; font-family: 'Sarabun', sans-serif; font-weight: 500; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2); color: var(--text2); cursor: pointer; text-align: center; }
-.gender-btn.active-m { background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
-.gender-btn.active-f { background: var(--purple-soft); color: var(--purple); border-color: var(--purple); }
+/* form */
+.fl{margin-bottom:11px;}
+.fl label{display:block;font-size:13px;color:var(--t2);margin-bottom:4px;font-weight:500;}
+.fl input,.fl select{width:100%;padding:10px 12px;font-size:15px;font-family:'Sarabun',sans-serif;
+  border:1px solid var(--border);border-radius:var(--r);background:var(--s2);color:var(--text);
+  -webkit-appearance:none;appearance:none;}
+.fl input:focus,.fl select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,95,138,.1);}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 
-.calc-btn { width: 100%; padding: 13px; font-size: 15px; font-weight: 600; font-family: 'Sarabun', sans-serif; background: var(--text); color: white; border: none; border-radius: var(--radius); cursor: pointer; margin-top: 4px; }
-.calc-btn:active { transform: scale(0.98); }
+/* gender */
+.gb{display:flex;gap:8px;}
+.gbb{flex:1;padding:9px;font-size:14px;font-family:'Sarabun',sans-serif;font-weight:500;
+  border:1px solid var(--border);border-radius:var(--r);background:var(--s2);color:var(--t2);
+  cursor:pointer;text-align:center;}
+.gbb.am{background:var(--bsoft);color:var(--blue);border-color:var(--blue);}
+.gbb.af{background:var(--psoft);color:var(--purple);border-color:var(--purple);}
+
+/* button */
+.btn{width:100%;padding:12px;font-size:15px;font-weight:600;font-family:'Sarabun',sans-serif;
+  background:var(--text);color:white;border:none;border-radius:var(--r);cursor:pointer;margin-top:2px;}
+.btn:active{transform:scale(.98);}
+.btn.sec{background:var(--s2);color:var(--text);border:1px solid var(--border);font-weight:500;margin-top:8px;}
 
 /* weight grid */
-.wt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.wt-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
-.wt-card.hl { background: var(--blue-soft); border-color: #aacde8; }
-.wt-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text3); margin-bottom: 2px; }
-.wt-card.hl .wt-label { color: var(--blue); opacity: 0.7; }
-.wt-num { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 500; color: var(--text); }
-.wt-card.hl .wt-num { color: var(--blue); }
-.wt-eq { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.wg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.wc{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:10px 8px;text-align:center;}
+.wc.hl{background:var(--bsoft);border-color:#aacde8;}
+.wlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--t3);margin-bottom:3px;}
+.wc.hl .wlbl{color:var(--blue);opacity:.7;}
+.wval{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--text);}
+.wc.hl .wval{color:var(--blue);}
+.weq{font-size:10px;color:var(--t3);margin-top:2px;}
 
-/* drug table */
-.tabs { display: flex; gap: 6px; margin-bottom: 12px; }
-.tab-btn { padding: 6px 14px; font-size: 13px; font-weight: 500; font-family: 'Sarabun', sans-serif; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); color: var(--text2); cursor: pointer; }
-.tab-btn.active { background: var(--text); color: white; border-color: var(--text); }
-.tab-pane { display: none; }
-.tab-pane.show { display: block; }
+/* trace */
+.trace{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);
+  padding:11px 13px;font-size:13px;color:var(--t2);line-height:2.0;}
+.trace b{color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;}
 
-.dtable { width: 100%; border-collapse: collapse; font-size: 14px; }
-.dtable th { text-align: left; padding: 7px 8px; font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-.dtable td { padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.dtable tr:last-child td { border-bottom: none; }
-.dtable tr:hover td { background: var(--surface2); }
-.dname { font-weight: 600; }
-.dnote { font-size: 12px; color: var(--text3); margin-top: 2px; }
+/* drug chips */
+.dtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:11px;}
+.dtabs::-webkit-scrollbar{display:none;}
+.dtb{padding:6px 14px;font-size:13px;font-weight:500;font-family:'Sarabun',sans-serif;
+  border:1px solid var(--border);border-radius:20px;background:var(--surface);color:var(--t2);
+  cursor:pointer;white-space:nowrap;}
+.dtb.on{background:var(--text);color:white;border-color:var(--text);}
+.tp{display:none;}
+.tp.on{display:block;}
 
-.badge { display: inline-block; padding: 2px 7px; border-radius: 5px; font-size: 11px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
-.b-tbw { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
-.b-ibw { background: var(--amber-soft); color: var(--amber); border: 1px solid #f0c070; }
-.b-lbm { background: var(--blue-soft); color: var(--blue); border: 1px solid #aacde8; }
-.b-adj { background: var(--green-soft); color: var(--green); border: 1px solid #90c8a8; }
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.dchip{padding:10px 11px;border:1.5px solid var(--border);border-radius:var(--r);
+  background:var(--s2);color:var(--t2);font-size:13px;font-weight:600;
+  font-family:'Sarabun',sans-serif;cursor:pointer;text-align:left;}
+.dchip .ds{font-size:11px;color:var(--t3);margin-top:2px;font-weight:400;}
+.dchip.on{background:var(--bsoft);color:var(--blue);border-color:var(--blue);}
+.dchip.on .ds{color:var(--blue);opacity:.7;}
 
-.dkg { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; }
+/* dose result */
+.dres{background:var(--gsoft);border:1px solid #90c8a8;border-radius:var(--rlg);padding:16px;margin-bottom:12px;}
+.dres-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px;}
+.drow{display:flex;justify-content:space-between;align-items:baseline;
+  padding:8px 0;border-bottom:1px solid rgba(42,122,74,.12);}
+.drow:last-child{border-bottom:none;}
+.dlbl{font-size:13px;color:var(--t2);}
+.dnum{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:var(--green);}
+.dunit{font-size:12px;color:var(--green);opacity:.7;margin-left:3px;}
+.dnote{background:rgba(0,0,0,.04);border-radius:8px;padding:9px 12px;
+  margin-top:10px;font-size:12px;color:var(--t2);line-height:1.8;}
+.cap-row .dlbl{color:var(--amber);}
+.cap-row .dnum{color:var(--amber);}
 
-.trace { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; font-size: 13px; color: var(--text2); line-height: 1.9; }
-.trace b { color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+/* drug list */
+.dtbl{width:100%;border-collapse:collapse;font-size:14px;}
+.dtbl th{text-align:left;padding:7px 8px;font-size:11px;font-weight:700;color:var(--t3);
+  letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.dtbl td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.dtbl tr:last-child td{border-bottom:none;}
+.dtbl tr:hover td{background:var(--s2);}
+.dname{font-weight:600;}
+.dnote2{font-size:11px;color:var(--t3);margin-top:2px;}
 
-.result-section { display: none; }
-.result-section.show { display: block; }
+.badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+.b-tbw{background:var(--s2);color:var(--t2);border:1px solid var(--border);}
+.b-ibw{background:var(--asoft);color:var(--amber);border:1px solid #f0c070;}
+.b-lbm{background:var(--bsoft);color:var(--blue);border:1px solid #aacde8;}
+.b-adj{background:var(--gsoft);color:var(--green);border:1px solid #90c8a8;}
 
-.ref { font-size: 11px; color: var(--text3); text-align: center; padding: 16px; line-height: 1.9; }
+.calcbtn{padding:5px 10px;font-size:12px;font-family:'Sarabun',sans-serif;font-weight:600;
+  border:1px solid var(--blue);border-radius:6px;background:var(--bsoft);color:var(--blue);cursor:pointer;}
+
+.hidden{display:none;}
+.warn{background:#fdecea;border:1px solid #f5a8a0;border-radius:var(--r);
+  padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:12px;}
+.ref{font-size:11px;color:var(--t3);text-align:center;padding:14px;line-height:1.9;}
 </style>
 </head>
 <body>
 
-<div class="app-header">
-  <h1>Drug Dosing — Obese Pediatric</h1>
-  <p>BMI ≥ 95th percentile · อ้างอิง: ภญ.สุนันทา เมรุ, swdcph.moph.go.th</p>
+<div class="hdr">
+  <h1>Obese Peds · Dose Calculator</h1>
+  <p>BMI ≥ 95th percentile · Ref: ภญ.สุนันทา เมรุ, swdcph.moph.go.th</p>
 </div>
 
-<div class="container">
+<!-- bottom nav -->
+<div class="bnav">
+  <button class="bn on" onclick="nav('pg-pt')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    ผู้ป่วย
+  </button>
+  <button class="bn" onclick="nav('pg-dose')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-4"/><path d="M9 3a2 2 0 000 4h6a2 2 0 000-4H9z"/><path d="M12 12v4m-2-2h4"/></svg>
+    Dose
+  </button>
+  <button class="bn" onclick="nav('pg-list')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+    รายการยา
+  </button>
+</div>
 
+<!-- ════ PAGE 1: ผู้ป่วย ════ -->
+<div class="page on" id="pg-pt">
+<div class="wrap">
   <div class="card">
-    <div class="card-title">ข้อมูลผู้ป่วย</div>
-    <div class="field">
+    <div class="ct">ข้อมูลผู้ป่วย</div>
+    <div class="fl">
       <label>เพศ</label>
-      <div class="gender-wrap">
-        <button class="gender-btn active-m" id="btn-m" onclick="setGender('m')">ชาย</button>
-        <button class="gender-btn" id="btn-f" onclick="setGender('f')">หญิง</button>
+      <div class="gb">
+        <button class="gbb am" id="bm" onclick="setSex('m')">ชาย</button>
+        <button class="gbb"    id="bf" onclick="setSex('f')">หญิง</button>
       </div>
     </div>
-    <div class="row">
-      <div class="field">
+    <div class="r2">
+      <div class="fl">
         <label>อายุ (ปี) — 2 ถึง 20</label>
-        <input type="number" id="age" min="2" max="20" step="1" placeholder="เช่น 5">
+        <input type="number" id="age" min="2" max="20" step="1" placeholder="เช่น 5" inputmode="decimal">
       </div>
-      <div class="field">
+      <div class="fl">
         <label>TBW น้ำหนักจริง (kg)</label>
-        <input type="number" id="tbw" min="1" step="0.1" placeholder="เช่น 38">
+        <input type="number" id="tbw" min="1" step="0.1" placeholder="เช่น 38" inputmode="decimal">
       </div>
     </div>
-    <div class="field">
+    <div class="fl">
       <label>ส่วนสูง (cm)</label>
-      <input type="number" id="ht" min="50" step="0.5" placeholder="เช่น 100">
+      <input type="number" id="ht" min="50" step="0.5" placeholder="เช่น 100" inputmode="decimal">
     </div>
-    <button class="calc-btn" onclick="calc()">คำนวณ</button>
+    <button class="btn" onclick="calcWt()">คำนวณน้ำหนัก</button>
   </div>
 
-  <div class="result-section" id="res">
-
+  <div id="wt-out" class="hidden">
     <div class="card">
-      <div class="card-title">ขั้นตอนการคำนวณ</div>
-      <div class="trace" id="trace"></div>
+      <div class="ct">ขั้นตอนการคำนวณ</div>
+      <div class="trace" id="trace-txt"></div>
+    </div>
+    <div class="card">
+      <div class="ct">น้ำหนักที่ใช้คำนวณยา</div>
+      <div class="wg">
+        <div class="wc"><div class="wlbl">TBW</div><div class="wval" id="o-tbw">—</div><div class="weq">น้ำหนักจริง</div></div>
+        <div class="wc"><div class="wlbl">IBW</div><div class="wval" id="o-ibw">—</div><div class="weq">BMI₅₀×ht(m)²</div></div>
+        <div class="wc hl"><div class="wlbl">LBM</div><div class="wval" id="o-lbm">—</div><div class="weq">IBW+0.29×Δ</div></div>
+        <div class="wc"><div class="wlbl">Adj CF0.3</div><div class="wval" id="o-a03">—</div><div class="weq">IBW+0.3×Δ</div></div>
+        <div class="wc"><div class="wlbl">Adj CF0.4</div><div class="wval" id="o-a04">—</div><div class="weq">IBW+0.4×Δ</div></div>
+        <div class="wc"><div class="wlbl">Adj CF0.45</div><div class="wval" id="o-a045">—</div><div class="weq">IBW+0.45×Δ</div></div>
+      </div>
+    </div>
+    <button class="btn" onclick="nav('pg-dose')">ไปคำนวณ Dose →</button>
+    <br>
+  </div>
+</div>
+</div>
+
+<!-- ════ PAGE 2: Dose ════ -->
+<div class="page" id="pg-dose">
+<div class="wrap">
+  <div id="no-pt" class="warn">⚠ กรุณากรอกข้อมูลผู้ป่วยก่อน
+    <button class="btn sec" onclick="nav('pg-pt')">← กรอกข้อมูล</button>
+  </div>
+  <div id="dose-main" class="hidden">
+
+    <div class="card" style="padding:11px 16px;">
+      <div style="font-size:13px;color:var(--t2);" id="pt-bar">—</div>
     </div>
 
     <div class="card">
-      <div class="card-title">น้ำหนักที่ใช้คำนวณยา</div>
-      <div class="wt-grid">
-        <div class="wt-card">
-          <div class="wt-label">TBW</div>
-          <div class="wt-num" id="o-tbw">—</div>
-          <div class="wt-eq">น้ำหนักจริง</div>
-        </div>
-        <div class="wt-card">
-          <div class="wt-label">IBW</div>
-          <div class="wt-num" id="o-ibw">—</div>
-          <div class="wt-eq">BMI₅₀ × สูง(m)²</div>
-        </div>
-        <div class="wt-card hl">
-          <div class="wt-label">LBM</div>
-          <div class="wt-num" id="o-lbm">—</div>
-          <div class="wt-eq">IBW + 0.29×(TBW−IBW)</div>
-        </div>
-        <div class="wt-card">
-          <div class="wt-label">AdjBW CF 0.4</div>
-          <div class="wt-num" id="o-a04">—</div>
-          <div class="wt-eq">IBW + 0.4×(TBW−IBW)</div>
-        </div>
-        <div class="wt-card">
-          <div class="wt-label">AdjBW CF 0.45</div>
-          <div class="wt-num" id="o-a045">—</div>
-          <div class="wt-eq">IBW + 0.45×(TBW−IBW)</div>
-        </div>
-        <div class="wt-card">
-          <div class="wt-label">AdjBW CF 0.3</div>
-          <div class="wt-num" id="o-a03">—</div>
-          <div class="wt-eq">IBW + 0.3×(TBW−IBW)</div>
-        </div>
+      <div class="ct">เลือกยา</div>
+      <div class="dtabs">
+        <button class="dtb on" onclick="dTab('dt-anti')">Antimicrobial</button>
+        <button class="dtb"    onclick="dTab('dt-analg')">Analgesic</button>
+        <button class="dtb"    onclick="dTab('dt-misc')">Miscellaneous</button>
       </div>
+      <div class="tp on" id="dt-anti"><div class="dgrid" id="ch-anti"></div></div>
+      <div class="tp"    id="dt-analg"><div class="dgrid" id="ch-analg"></div></div>
+      <div class="tp"    id="dt-misc"><div class="dgrid" id="ch-misc"></div></div>
     </div>
 
-    <div class="card">
-      <div class="card-title">ยาและน้ำหนักที่แนะนำ</div>
-      <div class="tabs">
-        <button class="tab-btn active" onclick="tab('anti')">Antimicrobial</button>
-        <button class="tab-btn" onclick="tab('analg')">Analgesic</button>
-        <button class="tab-btn" onclick="tab('misc')">Misc</button>
+    <div class="card" id="cfg-card">
+      <div class="ct" id="cfg-title">ตั้งค่าการคำนวณ</div>
+      <div class="r2">
+        <div class="fl">
+          <label>Dose (mg/kg/dose)</label>
+          <input type="number" id="inp-mgkg" step="0.1" min="0" placeholder="เช่น 15" inputmode="decimal">
+        </div>
+        <div class="fl">
+          <label>Max dose (mg) — ไม่บังคับ</label>
+          <input type="number" id="inp-max" step="1" min="0" placeholder="เช่น 1000" inputmode="decimal">
+        </div>
       </div>
-      <div class="tab-pane show" id="tab-anti">
-        <table class="dtable"><thead><tr><th>ยา</th><th>Weight</th><th>kg</th></tr></thead><tbody id="b-anti"></tbody></table>
+      <div class="fl">
+        <label>น้ำหนักที่ใช้</label>
+        <select id="inp-wt">
+          <option value="lbm">LBM</option>
+          <option value="ibw">IBW</option>
+          <option value="tbw">TBW</option>
+          <option value="a04">AdjBW CF 0.4</option>
+          <option value="a045">AdjBW CF 0.45</option>
+          <option value="a03">AdjBW CF 0.3</option>
+        </select>
       </div>
-      <div class="tab-pane" id="tab-analg">
-        <table class="dtable"><thead><tr><th>ยา</th><th>Weight</th><th>kg</th></tr></thead><tbody id="b-analg"></tbody></table>
+      <div class="fl">
+        <label>รูปแบบยา / ความเข้มข้น</label>
+        <select id="inp-form" onchange="chgForm()">
+          <option value="">— เลือกรูปแบบยา —</option>
+          <option value="custom">กรอกเอง (mg/ml)</option>
+        </select>
       </div>
-      <div class="tab-pane" id="tab-misc">
-        <table class="dtable"><thead><tr><th>ยา</th><th>Weight</th><th>kg</th></tr></thead><tbody id="b-misc"></tbody></table>
+      <div id="custom-c" class="hidden">
+        <div class="fl">
+          <label>ความเข้มข้น (mg/ml)</label>
+          <input type="number" id="inp-conc" step="0.01" min="0" placeholder="เช่น 24" inputmode="decimal">
+        </div>
+      </div>
+      <button class="btn" onclick="doDose()">คำนวณ Dose</button>
+    </div>
+
+    <div id="dose-res" class="hidden">
+      <div class="dres">
+        <div class="dres-title" id="res-name">—</div>
+        <div class="drow">
+          <span class="dlbl">น้ำหนักที่ใช้</span>
+          <span><span class="dnum" id="res-wt">—</span><span class="dunit">kg</span></span>
+        </div>
+        <div class="drow">
+          <span class="dlbl">Dose / ครั้ง</span>
+          <span><span class="dnum" id="res-mg">—</span><span class="dunit">mg</span></span>
+        </div>
+        <div class="drow hidden" id="res-ml-row">
+          <span class="dlbl" id="res-form-lbl">ปริมาตร</span>
+          <span><span class="dnum" id="res-ml">—</span><span class="dunit">ml</span></span>
+        </div>
+        <div class="drow cap-row hidden" id="res-cap-row">
+          <span class="dlbl">⚠ ถูก cap ที่ max dose</span>
+          <span><span class="dnum" id="res-cap">—</span><span class="dunit">mg</span></span>
+        </div>
+        <div class="dnote" id="res-note"></div>
       </div>
     </div>
 
   </div>
+</div>
+</div>
 
+<!-- ════ PAGE 3: รายการยา ════ -->
+<div class="page" id="pg-list">
+<div class="wrap">
+  <div class="card">
+    <div class="ct">รายการยาทั้งหมด</div>
+    <div class="dtabs">
+      <button class="dtb on" onclick="lTab('lt-anti')">Antimicrobial</button>
+      <button class="dtb"    onclick="lTab('lt-analg')">Analgesic</button>
+      <button class="dtb"    onclick="lTab('lt-misc')">Miscellaneous</button>
+    </div>
+    <div class="tp on" id="lt-anti">
+      <table class="dtbl"><thead><tr><th>ยา</th><th>Weight</th><th>kg</th><th></th></tr></thead>
+      <tbody id="lb-anti"></tbody></table>
+    </div>
+    <div class="tp" id="lt-analg">
+      <table class="dtbl"><thead><tr><th>ยา</th><th>Weight</th><th>kg</th><th></th></tr></thead>
+      <tbody id="lb-analg"></tbody></table>
+    </div>
+    <div class="tp" id="lt-misc">
+      <table class="dtbl"><thead><tr><th>ยา</th><th>Weight</th><th>kg</th><th></th></tr></thead>
+      <tbody id="lb-misc"></tbody></table>
+    </div>
+  </div>
   <p class="ref">
     อ้างอิง: ภญ.สุนันทา เมรุ · DRUG DOSING FOR OBESE PEDIATRIC PATIENTS<br>
-    Sawang Daen Din Hospital, สพ.สว่างแดนดิน · ปีที่ 2 ฉบับ 5 มกราคม 2564<br>
-    swdcph.moph.go.th · ใช้ประกอบการตัดสินใจทางคลินิกเท่านั้น
+    Sawang Daen Din Hospital · ปีที่ 2 ฉบับ 5 มกราคม 2564<br>
+    IBW = BMI ที่ 50th percentile × ส่วนสูง(m)²<br>
+    โปรแกรมนี้ใช้ประกอบการตัดสินใจทางคลินิกเท่านั้น
   </p>
+</div>
 </div>
 
 <script>
-// BMI p50 ตามอายุและเพศ (จากตารางในชีท)
+// ══ BMI p50 (ตารางในชีท)
 const B50 = {
   m:{2:16.5,3:16.3,4:16.0,5:15.8,6:15.6,7:15.4,8:15.4,9:15.6,10:15.9,
      11:16.2,12:16.5,13:16.8,14:17.2,15:17.5,16:18.0,17:18.5,18:19.1,19:19.8,20:20.5},
@@ -198,115 +344,256 @@ const B50 = {
      11:16.1,12:16.4,13:16.7,14:17.1,15:17.5,16:17.9,17:18.3,18:18.8,19:19.4,20:20.0}
 };
 
-// รายการยา อ้างอิงจาก PDF ของ swdcph.moph.go.th โดยตรง
+// ══ รายการยา
 const DRUGS = {
   anti:[
-    {n:'Acyclovir',       k:'ibw',  bc:'b-ibw'},
-    {n:'Penicillins',     k:'tbw',  bc:'b-tbw'},
-    {n:'Carbapenems',     k:'tbw',  bc:'b-tbw'},
-    {n:'Cephalosporins',  k:'tbw',  bc:'b-tbw'},
-    {n:'Ciprofloxacin',   k:'a045', bc:'b-adj', note:'TBW หรือ AdjBW (CF 0.45)'},
-    {n:'Clindamycin',     k:'tbw',  bc:'b-tbw'},
-    {n:'Aminoglycosides', k:'a04',  bc:'b-adj', note:'AdjBW (CF 0.4) หรือ TBW'},
-    {n:'Metronidazole',   k:'tbw',  bc:'b-tbw'},
-    {n:'Vancomycin',      k:'tbw',  bc:'b-tbw'},
+    {id:'acyclovir', n:'Acyclovir',      wt:'ibw', bc:'b-ibw',
+     mgkg:[5,10],   maxDose:800,
+     forms:[{l:'Acyclovir syrup 200mg/5ml',c:40},{l:'Acyclovir IV 25mg/ml',c:25}],
+     note:'IBW · dose แตกต่างตามข้อบ่งชี้'},
+    {id:'penicilin', n:'Penicillin',      wt:'tbw', bc:'b-tbw',
+     mgkg:[25,50],  maxDose:null,
+     forms:[{l:'Penicillin V syrup 125mg/5ml',c:25},{l:'Penicillin V syrup 250mg/5ml',c:50}],
+     note:'TBW'},
+    {id:'cephalo',   n:'Cephalosporin',   wt:'tbw', bc:'b-tbw',
+     mgkg:[25,50],  maxDose:null,
+     forms:[{l:'Cephalexin syrup 125mg/5ml',c:25},{l:'Cephalexin syrup 250mg/5ml',c:50}],
+     note:'TBW หรือ AdjBW CF0.45 · ปรับตามชนิดยา',
+     wtAlt:'a045'},
+    {id:'clinda',    n:'Clindamycin',     wt:'tbw', bc:'b-tbw',
+     mgkg:[10,25],  maxDose:600,
+     forms:[{l:'Clinda syrup 75mg/5ml',c:15},{l:'Clinda IV 150mg/ml',c:150}],
+     note:'TBW · ทุก 6-8 ชม.'},
+    {id:'metro',     n:'Metronidazole',   wt:'tbw', bc:'b-tbw',
+     mgkg:[7.5,10], maxDose:500,
+     forms:[{l:'Flagyl syrup 200mg/5ml',c:40},{l:'Flagyl IV 5mg/ml',c:5}],
+     note:'TBW · ทุก 8 ชม.'},
   ],
   analg:[
-    {n:'Ibuprofen',   k:'lbm', bc:'b-lbm', note:'LBM หรือ AdjBW CF0.4 · ไม่เกิน max ผู้ใหญ่'},
-    {n:'Paracetamol', k:'lbm', bc:'b-lbm', note:'LBM หรือ AdjBW CF0.4 · ไม่เกิน max ผู้ใหญ่ หรือ IBW'},
-    {n:'Morphine',    k:'ibw', bc:'b-ibw'},
+    {id:'para',      n:'Paracetamol',     wt:'lbm', bc:'b-lbm',
+     mgkg:[10,15],  maxDose:1000,
+     forms:[{l:'Para syrup 120mg/5ml',c:24},{l:'Para syrup 250mg/5ml',c:50},{l:'Para drop 100mg/ml',c:100},{l:'Para IV 10mg/ml',c:10}],
+     note:'LBM หรือ AdjBW CF0.4 · ไม่เกิน 1000mg/dose · ทุก 4-6 ชม.'},
+    {id:'ibu',       n:'Ibuprofen',       wt:'lbm', bc:'b-lbm',
+     mgkg:[5,10],   maxDose:400,
+     forms:[{l:'Ibu syrup 100mg/5ml',c:20},{l:'Ibu syrup 200mg/5ml',c:40}],
+     note:'LBM หรือ AdjBW CF0.4 · ไม่เกิน 400mg/dose · ทุก 6-8 ชม.'},
   ],
   misc:[
-    {n:'Phenytoin',       k:'tbw',  bc:'b-tbw',  note:'TBW loading (max 2g) · IBW หรือ AdjBW CF0.3 maintenance'},
-    {n:'Carbamazepine',   k:'ibw',  bc:'b-ibw'},
-    {n:'Benzodiazepines', k:'ibw',  bc:'b-ibw'},
-    {n:'Phenobarbital',   k:'tbw',  bc:'b-tbw'},
-    {n:'Enoxaparin',      k:'a04',  bc:'b-adj',  note:'TBW หรือ AdjBW (CF 0.4)'},
-    {n:'Heparin',         k:'a04',  bc:'b-adj',  note:'TBW หรือ AdjBW (CF 0.4)'},
-    {n:'Prednisolone',    k:'tbw',  bc:'b-tbw'},
-    {n:'Theophylline',    k:'tbw',  bc:'b-tbw',  note:'TBW loading · IBW maintenance'},
-    {n:'Ondansetron',     k:'tbw',  bc:'b-tbw'},
-    {n:'PPIs',            k:'lbm',  bc:'b-lbm',  note:'TBW หรือ LBM'},
+    {id:'dompe',     n:'Domperidone',     wt:'tbw', bc:'b-tbw',
+     mgkg:[0.2,0.3],maxDose:10,
+     forms:[{l:'Domperidone 1mg/ml',c:1}],
+     note:'TBW · ทุก 8 ชม.'},
+    {id:'hyoscine',  n:'Hyoscine',        wt:'tbw', bc:'b-tbw',
+     mgkg:[0.3,0.5],maxDose:10,
+     forms:[{l:'Hyoscine syrup 2mg/5ml',c:0.4}],
+     note:'TBW'},
+    {id:'dextro',    n:'Dextromethorphan',wt:'tbw', bc:'b-tbw',
+     mgkg:[0.5,1],  maxDose:30,
+     forms:[{l:'DM syrup 15mg/5ml',c:3}],
+     note:'TBW · ทุก 6-8 ชม.'},
+    {id:'guaife',    n:'Guaifenesin',     wt:'tbw', bc:'b-tbw',
+     mgkg:[5,10],   maxDose:200,
+     forms:[{l:'Guaifenesin syrup 100mg/5ml',c:20}],
+     note:'TBW · ทุก 4-6 ชม.'},
+    {id:'ambroxol',  n:'Ambroxol',        wt:'tbw', bc:'b-tbw',
+     mgkg:[1.2,1.6],maxDose:30,
+     forms:[{l:'Ambroxol syrup 15mg/5ml',c:3},{l:'Ambroxol syrup 30mg/5ml',c:6}],
+     note:'TBW · ทุก 8-12 ชม.'},
+    {id:'bromhex',   n:'Bromhexine',      wt:'tbw', bc:'b-tbw',
+     mgkg:[0.5,1],  maxDose:8,
+     forms:[{l:'Bromhexine syrup 4mg/5ml',c:0.8}],
+     note:'TBW · ทุก 8 ชม.'},
+    {id:'carbocys',  n:'Carbocysteine',   wt:'ibw', bc:'b-ibw',
+     mgkg:[10,15],  maxDose:250,
+     forms:[{l:'Carbocysteine syrup 125mg/5ml',c:25},{l:'Carbocysteine syrup 250mg/5ml',c:50}],
+     note:'IBW'},
+    {id:'acetylcys', n:'Acetylcysteine',  wt:'ibw', bc:'b-ibw',
+     mgkg:[10,15],  maxDose:200,
+     forms:[{l:'Acetylcysteine syrup 100mg/5ml',c:20}],
+     note:'IBW'},
   ]
 };
 
-const LABEL = {tbw:'TBW',ibw:'IBW',lbm:'LBM',a04:'AdjBW 0.4',a045:'AdjBW 0.45',a03:'AdjBW 0.3'};
-let sex = 'm', W = {};
-const f2 = n => n.toFixed(2);
+const WTLBL={tbw:'TBW',ibw:'IBW',lbm:'LBM',a03:'AdjBW CF0.3',a04:'AdjBW CF0.4',a045:'AdjBW CF0.45'};
+let sex='m', W={}, ready=false, cur=null;
+const f2=n=>n.toFixed(2);
 
-function setGender(g) {
-  sex = g;
-  document.getElementById('btn-m').className = 'gender-btn'+(g==='m'?' active-m':'');
-  document.getElementById('btn-f').className = 'gender-btn'+(g==='f'?' active-f':'');
+function setSex(g){
+  sex=g;
+  document.getElementById('bm').className='gbb'+(g==='m'?' am':'');
+  document.getElementById('bf').className='gbb'+(g==='f'?' af':'');
 }
 
-function calc() {
-  const age = parseInt(document.getElementById('age').value);
-  const tbw = parseFloat(document.getElementById('tbw').value);
-  const htCm = parseFloat(document.getElementById('ht').value);
-  if ([age,tbw,htCm].some(isNaN)) { alert('กรุณากรอกข้อมูลให้ครบ'); return; }
-  if (age<2||age>20) { alert('รองรับอายุ 2–20 ปี'); return; }
+function nav(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.bn').forEach((b,i)=>
+    b.classList.toggle('on',['pg-pt','pg-dose','pg-list'][i]===id));
+  if(id==='pg-dose') refreshDose();
+  if(id==='pg-list') renderList();
+}
 
-  const htM = htCm/100;
-  const bmi50 = B50[sex][age];
+function calcWt(){
+  const age=parseInt(document.getElementById('age').value);
+  const tbw=parseFloat(document.getElementById('tbw').value);
+  const htCm=parseFloat(document.getElementById('ht').value);
+  if([age,tbw,htCm].some(isNaN)){alert('กรุณากรอกข้อมูลให้ครบ');return;}
+  if(age<2||age>20){alert('รองรับอายุ 2–20 ปี');return;}
 
-  // ── สูตรอ้างอิง PDF swdcph.moph.go.th ──
-  // IBW = BMI ที่ 50th percentile × ส่วนสูง(m)²
+  const htM=htCm/100;
+  const bmi50=B50[sex][age];
+
+  // สูตรจากชีท swdcph.moph.go.th
   const ibw  = bmi50 * htM * htM;
-  // LBM = IBW + 0.29 × (TBW − IBW)
-  const lbm  = ibw + 0.29  * (tbw - ibw);
-  // AdjBW = IBW + CF × (TBW − IBW)
-  const a04  = ibw + 0.4   * (tbw - ibw);
-  const a045 = ibw + 0.45  * (tbw - ibw);
-  const a03  = ibw + 0.3   * (tbw - ibw);
+  const lbm  = ibw + 0.29*(tbw-ibw);
+  const a03  = ibw + 0.3 *(tbw-ibw);
+  const a04  = ibw + 0.4 *(tbw-ibw);
+  const a045 = ibw + 0.45*(tbw-ibw);
 
-  W = {tbw,ibw,lbm,a04,a045,a03};
+  W={tbw,ibw,lbm,a03,a04,a045,age,htCm,sex,bmi50};
+  ready=true;
 
-  // trace
-  const gs = sex==='m'?'ชาย':'หญิง';
-  document.getElementById('trace').innerHTML =
-    `เพศ ${gs} · อายุ ${age} ปี · สูง ${htCm} cm · TBW ${tbw} kg<br><br>`+
+  const gs=sex==='m'?'ชาย':'หญิง';
+  document.getElementById('trace-txt').innerHTML=
+    `เพศ ${gs} · อายุ ${age} ปี · สูง ${htCm} cm · TBW ${tbw} kg<br>`+
     `BMI₅₀ (${gs}, ${age}ปี) = <b>${bmi50}</b> kg/m²<br>`+
     `<b>IBW</b> = ${bmi50} × ${f2(htM)}² = <b>${f2(ibw)} kg</b><br>`+
-    `<b>LBM</b> = ${f2(ibw)} + 0.29 × (${tbw} − ${f2(ibw)}) = <b>${f2(lbm)} kg</b><br>`+
-    `<b>AdjBW (CF 0.4)</b> = ${f2(ibw)} + 0.4 × (${tbw} − ${f2(ibw)}) = <b>${f2(a04)} kg</b>`;
+    `<b>LBM</b> = ${f2(ibw)} + 0.29 × (${tbw}−${f2(ibw)}) = <b>${f2(lbm)} kg</b><br>`+
+    `<b>AdjBW CF0.4</b> = ${f2(ibw)} + 0.4 × (${tbw}−${f2(ibw)}) = <b>${f2(a04)} kg</b>`;
 
-  // weight cards
-  document.getElementById('o-tbw').textContent  = tbw+' kg';
-  document.getElementById('o-ibw').textContent  = f2(ibw)+' kg';
-  document.getElementById('o-lbm').textContent  = f2(lbm)+' kg';
-  document.getElementById('o-a04').textContent  = f2(a04)+' kg';
-  document.getElementById('o-a045').textContent = f2(a045)+' kg';
-  document.getElementById('o-a03').textContent  = f2(a03)+' kg';
+  document.getElementById('o-tbw').textContent =tbw+' kg';
+  document.getElementById('o-ibw').textContent =f2(ibw)+' kg';
+  document.getElementById('o-lbm').textContent =f2(lbm)+' kg';
+  document.getElementById('o-a03').textContent =f2(a03)+' kg';
+  document.getElementById('o-a04').textContent =f2(a04)+' kg';
+  document.getElementById('o-a045').textContent=f2(a045)+' kg';
 
-  renderDrugs();
-  document.getElementById('res').classList.add('show');
-  document.getElementById('res').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('wt-out').classList.remove('hidden');
+  renderList();
 }
 
-function renderDrugs() {
-  ['anti','analg','misc'].forEach(cat => {
-    const tbody = document.getElementById('b-'+cat);
-    tbody.innerHTML = '';
-    DRUGS[cat].forEach(d => {
-      const kg = W[d.k] ?? W.tbw;
-      tbody.innerHTML += `<tr>
-        <td><div class="dname">${d.n}</div>${d.note?`<div class="dnote">${d.note}</div>`:''}</td>
-        <td><span class="badge ${d.bc}">${LABEL[d.k]}</span></td>
-        <td><div class="dkg">${f2(kg)}</div></td>
-      </tr>`;
+function refreshDose(){
+  const np=document.getElementById('no-pt');
+  const dm=document.getElementById('dose-main');
+  if(!ready){np.classList.remove('hidden');dm.classList.add('hidden');return;}
+  np.classList.add('hidden');dm.classList.remove('hidden');
+  const gs=W.sex==='m'?'ชาย':'หญิง';
+  document.getElementById('pt-bar').innerHTML=
+    `<b>${gs} ${W.age}ปี</b> · TBW ${W.tbw}kg · IBW <b>${f2(W.ibw)}kg</b> · LBM <b>${f2(W.lbm)}kg</b>`;
+  buildChips();
+}
+
+function buildChips(){
+  ['anti','analg','misc'].forEach(cat=>{
+    const el=document.getElementById('ch-'+cat);
+    el.innerHTML='';
+    DRUGS[cat].forEach(d=>{
+      const wk=W[d.wt]??W.tbw;
+      el.innerHTML+=`<button class="dchip${cur&&cur.id===d.id?' on':''}" onclick="pickDrug('${d.id}')">
+        ${d.n}<div class="ds">${WTLBL[d.wt]} = ${f2(wk)} kg</div></button>`;
     });
   });
 }
 
-function tab(name) {
-  ['anti','analg','misc'].forEach(t => {
-    document.getElementById('tab-'+t).classList.toggle('show', t===name);
-  });
-  document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    b.classList.toggle('active', ['anti','analg','misc'][i]===name);
+function pickDrug(id){
+  let found=null;
+  ['anti','analg','misc'].forEach(c=>{const d=DRUGS[c].find(x=>x.id===id);if(d)found=d;});
+  if(!found)return;
+  cur=found;
+  buildChips();
+
+  document.getElementById('cfg-title').textContent='คำนวณ: '+found.n;
+  document.getElementById('inp-mgkg').value=found.mgkg?found.mgkg[0]:'';
+  document.getElementById('inp-max').value=found.maxDose||'';
+  document.getElementById('inp-wt').value=found.wt;
+
+  const fsel=document.getElementById('inp-form');
+  fsel.innerHTML='<option value="">— เลือกรูปแบบยา —</option>';
+  (found.forms||[]).forEach((f,i)=>fsel.innerHTML+=`<option value="${i}">${f.l}</option>`);
+  fsel.innerHTML+='<option value="custom">กรอกเอง (mg/ml)</option>';
+  fsel.value='';
+  document.getElementById('custom-c').classList.add('hidden');
+  document.getElementById('dose-res').classList.add('hidden');
+  document.getElementById('cfg-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function chgForm(){
+  document.getElementById('custom-c').classList.toggle('hidden',
+    document.getElementById('inp-form').value!=='custom');
+}
+
+function doDose(){
+  if(!cur){alert('กรุณาเลือกยาก่อน');return;}
+  const mgkg=parseFloat(document.getElementById('inp-mgkg').value);
+  if(isNaN(mgkg)){alert('กรุณากรอกขนาดยา (mg/kg)');return;}
+  const wtKey=document.getElementById('inp-wt').value;
+  const maxD=parseFloat(document.getElementById('inp-max').value)||null;
+  const fi=document.getElementById('inp-form').value;
+
+  const wkg=W[wtKey]??W.tbw;
+  let mg=mgkg*wkg, capped=false;
+  if(maxD&&mg>maxD){mg=maxD;capped=true;}
+
+  let conc=null, formLbl='';
+  if(fi==='custom'){
+    conc=parseFloat(document.getElementById('inp-conc').value)||null;
+  } else if(fi!==''&&cur.forms){
+    const f=cur.forms[parseInt(fi)];
+    if(f){conc=f.c;formLbl=f.l;}
+  }
+
+  document.getElementById('res-name').textContent=cur.n;
+  document.getElementById('res-wt').textContent=f2(wkg);
+  document.getElementById('res-mg').textContent=f2(mg);
+
+  const mlRow=document.getElementById('res-ml-row');
+  if(conc){
+    document.getElementById('res-ml').textContent=f2(mg/conc);
+    document.getElementById('res-form-lbl').textContent='ปริมาตร'+(formLbl?' · '+formLbl:'');
+    mlRow.classList.remove('hidden');
+  } else mlRow.classList.add('hidden');
+
+  const capRow=document.getElementById('res-cap-row');
+  if(capped){document.getElementById('res-cap').textContent=f2(maxD);capRow.classList.remove('hidden');}
+  else capRow.classList.add('hidden');
+
+  let note=`น้ำหนักที่ใช้: <b>${WTLBL[wtKey]}</b> = ${f2(wkg)} kg`;
+  if(cur.mgkg) note+=`<br>ช่วง dose แนะนำ: ${cur.mgkg[0]}–${cur.mgkg[1]} mg/kg/dose`;
+  if(capped) note+=`<br>⚠ ถูก cap ที่ max ${maxD} mg`;
+  if(cur.note) note+=`<br>${cur.note}`;
+  document.getElementById('res-note').innerHTML=note;
+
+  document.getElementById('dose-res').classList.remove('hidden');
+  document.getElementById('dose-res').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function dTab(n){
+  ['dt-anti','dt-analg','dt-misc'].forEach(t=>document.getElementById(t).classList.toggle('on',t===n));
+  document.querySelectorAll('#pg-dose .dtb').forEach((b,i)=>
+    b.classList.toggle('on',['dt-anti','dt-analg','dt-misc'][i]===n));
+}
+function lTab(n){
+  ['lt-anti','lt-analg','lt-misc'].forEach(t=>document.getElementById(t).classList.toggle('on',t===n));
+  document.querySelectorAll('#pg-list .dtb').forEach((b,i)=>
+    b.classList.toggle('on',['lt-anti','lt-analg','lt-misc'][i]===n));
+}
+function renderList(){
+  ['anti','analg','misc'].forEach(cat=>{
+    const tb=document.getElementById('lb-'+cat);
+    tb.innerHTML='';
+    DRUGS[cat].forEach(d=>{
+      const kg=ready?(W[d.wt]??W.tbw):null;
+      tb.innerHTML+=`<tr>
+        <td><div class="dname">${d.n}</div>${d.note?`<div class="dnote2">${d.note}</div>`:''}</td>
+        <td><span class="badge ${d.bc}">${WTLBL[d.wt]}</span></td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:13px;">${kg?f2(kg):'—'}</td>
+        <td>${ready?`<button class="calcbtn" onclick="goCalc('${d.id}')">คำนวณ</button>`:''}</td>
+      </tr>`;
+    });
   });
 }
+function goCalc(id){nav('pg-dose');setTimeout(()=>pickDrug(id),80);}
 </script>
 </body>
 </html>
