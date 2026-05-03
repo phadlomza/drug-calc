@@ -137,6 +137,25 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
 .warn{background:#fdecea;border:1px solid #f5a8a0;border-radius:var(--r);
   padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:12px;}
 .ref{font-size:11px;color:var(--t3);text-align:center;padding:14px;line-height:1.9;}
+
+/* obesity classification */
+.obese-result{border-radius:var(--rlg);padding:16px;margin-bottom:0;}
+.obese-result.cls-healthy{background:#e8f5ee;border:1.5px solid #90c8a8;}
+.obese-result.cls-over{background:#fff8e1;border:1.5px solid #ffe082;}
+.obese-result.cls-ob1{background:#fff3e0;border:1.5px solid #ffb74d;}
+.obese-result.cls-ob2{background:#fdecea;border:1.5px solid #ef9a9a;}
+.obese-result.cls-ob3{background:#f3e5f5;border:1.5px solid #ce93d8;}
+.obese-badge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:14px;font-weight:700;margin-bottom:10px;}
+.cls-healthy .obese-badge{background:#2a7a4a;color:white;}
+.cls-over    .obese-badge{background:#f9a825;color:white;}
+.cls-ob1     .obese-badge{background:#ef6c00;color:white;}
+.cls-ob2     .obese-badge{background:#c62828;color:white;}
+.cls-ob3     .obese-badge{background:#6a1b9a;color:white;}
+.obese-detail{font-size:13px;line-height:1.9;color:var(--t1);}
+.obese-detail b{font-family:'IBM Plex Mono',monospace;font-size:12px;}
+.bmi-bar{height:10px;border-radius:5px;background:linear-gradient(90deg,#2a7a4a 20%,#f9a825 40%,#ef6c00 60%,#c62828 80%,#6a1b9a 100%);
+  margin:8px 0 4px;position:relative;}
+.bmi-pointer{position:absolute;top:-4px;width:4px;height:18px;background:var(--text);border-radius:2px;transform:translateX(-50%);}
 </style>
 </head>
 <body>
@@ -195,6 +214,19 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
     <div class="card">
       <div class="ct">ขั้นตอนการคำนวณ</div>
       <div class="trace" id="trace-txt"></div>
+      <!-- BMI actual display -->
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 8px;text-align:center;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--t3);margin-bottom:4px;">BMI จริง</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:var(--text);" id="o-bmi-actual">—</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:2px;">kg/m²</div>
+        </div>
+        <div style="flex:1;background:var(--bsoft);border:1px solid #aacde8;border-radius:var(--r);padding:12px 8px;text-align:center;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--blue);opacity:.7;margin-bottom:4px;">BMI p50</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:var(--blue);" id="o-bmi-p50">—</div>
+          <div style="font-size:10px;color:var(--blue);opacity:.6;margin-top:2px;">kg/m²</div>
+        </div>
+      </div>
     </div>
     <div class="card">
       <div class="ct">น้ำหนักที่ใช้คำนวณยา</div>
@@ -206,6 +238,31 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
         <div class="wc"><div class="wlbl">Adj CF0.4</div><div class="wval" id="o-a04">—</div><div class="weq">IBW+0.4×Δ</div></div>
         <div class="wc"><div class="wlbl">Adj CF0.45</div><div class="wval" id="o-a045">—</div><div class="weq">IBW+0.45×Δ</div></div>
       </div>
+    </div>
+
+    <div class="card" id="obese-class-card">
+      <div class="ct">การจำแนกภาวะน้ำหนัก (CDC 2024)</div>
+      <div id="obese-result-box"></div>
+      <details style="margin-top:12px;">
+        <summary style="font-size:12px;color:var(--t2);cursor:pointer;font-weight:600;">ดูเกณฑ์การจำแนกทั้งหมด</summary>
+        <table class="bmi-table" style="margin-top:8px;">
+          <thead><tr><th>ภาวะ</th><th>BMI percentile</th></tr></thead>
+          <tbody>
+            <tr><td>Underweight</td><td>&lt; 5th percentile</td></tr>
+            <tr><td>Healthy Weight</td><td>5th – &lt;85th percentile</td></tr>
+            <tr><td>Overweight</td><td>85th – &lt;95th percentile</td></tr>
+            <tr><td>Obesity (Class 1)</td><td>≥ 95th percentile ถึง &lt;120% ของ BMI₉₅</td></tr>
+            <tr><td>Obesity (Class 2)</td><td>120% – &lt;140% ของ BMI₉₅ หรือ BMI ≥ 35</td></tr>
+            <tr><td>Obesity (Class 3)</td><td>≥ 140% ของ BMI₉₅ หรือ BMI ≥ 40</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px;color:var(--t3);margin-top:8px;line-height:1.7;">
+          อ้างอิง: CDC (2024) Child and Teen BMI Categories<br>
+          <a href="https://www.cdc.gov/bmi/child-teen-calculator/bmi-categories.html" target="_blank"
+             style="color:var(--blue);">cdc.gov/bmi/child-teen-calculator/bmi-categories.html</a><br>
+          American Academy of Pediatrics (AAP) 2023 · NHLBI
+        </p>
+      </details>
     </div>
     <button class="btn" onclick="nav('pg-dose')">ไปคำนวณ Dose →</button>
     <br>
@@ -469,6 +526,14 @@ function calcWt(){
   document.getElementById('o-a04').textContent =f2(a04)+' kg';
   document.getElementById('o-a045').textContent=f2(a045)+' kg';
 
+  const actualBmi = tbw / (htM * htM);
+  const p95val = BMI95[sex][Math.min(Math.max(Math.round(age),2),20)];
+  document.getElementById('o-bmi-actual').textContent = actualBmi.toFixed(1);
+  document.getElementById('o-bmi-p50').textContent    = bmi50.toFixed(1);
+  // เพิ่มใน trace
+  document.getElementById('trace-txt').innerHTML +=
+    '<br><b>BMI จริง</b> = ' + tbw + ' ÷ ' + f2(htM) + '² = <b>' + actualBmi.toFixed(2) + ' kg/m²</b>';
+  renderObesityClass(actualBmi, age, sex);
   document.getElementById('wt-out').classList.remove('hidden');
   renderList();
 }
@@ -594,6 +659,111 @@ function renderList(){
   });
 }
 function goCalc(id){nav('pg-dose');setTimeout(()=>pickDrug(id),80);}
+
+// ══ BMI p95 table (ใช้คำนวณ %BMI95)
+// ค่าประมาณจาก CDC growth charts สำหรับ BMI p95 (kg/m²)
+const BMI95 = {
+  m:{2:18.4,3:17.9,4:17.6,5:17.4,6:17.4,7:17.7,8:18.2,9:18.9,10:19.6,
+     11:20.4,12:21.2,13:22.0,14:22.8,15:23.5,16:24.1,17:24.6,18:25.1,19:25.4,20:25.6},
+  f:{2:18.0,3:17.6,4:17.3,5:17.1,6:17.2,7:17.5,8:18.1,9:18.8,10:19.7,
+     11:20.7,12:21.7,13:22.6,14:23.3,15:23.9,16:24.4,17:24.8,18:25.1,19:25.4,20:25.6}
+};
+
+function classifyObesity(bmi, age, sex) {
+  const p95 = BMI95[sex][Math.min(Math.max(Math.round(age), 2), 20)];
+  const pctOf95 = (bmi / p95) * 100;
+
+  // คำนวณ percentile โดยประมาณ (ใช้ BMI50 และ BMI95 ที่มี)
+  const p50 = B50[sex][Math.min(Math.max(Math.round(age), 2), 20)];
+  let approxPct = '';
+  if (bmi < p50) approxPct = '< 50th';
+  else if (bmi < p95) {
+    // ประมาณ linear ระหว่าง p50-p95
+    const frac = (bmi - p50) / (p95 - p50);
+    const pct = Math.round(50 + frac * 45);
+    approxPct = `~${pct}th`;
+  } else {
+    approxPct = `≥ 95th`;
+  }
+
+  let cls, label, desc;
+  if (bmi < p50 * 0.9) {
+    cls='cls-healthy'; label='Underweight'; 
+    desc=`BMI <b>${bmi.toFixed(1)}</b> · ต่ำกว่า 5th percentile`;
+  } else if (pctOf95 < 85/95*100) {
+    cls='cls-healthy'; label='น้ำหนักปกติ (Healthy Weight)';
+    desc=`BMI <b>${bmi.toFixed(1)}</b> · อยู่ระหว่าง 5th–85th percentile`;
+  } else if (pctOf95 < 100) {
+    cls='cls-over'; label='น้ำหนักเกิน (Overweight)';
+    desc=`BMI <b>${bmi.toFixed(1)}</b> · อยู่ระหว่าง 85th–95th percentile<br>BMI p95 ของเพศ/อายุนี้ = <b>${p95.toFixed(1)}</b>`;
+  } else if (pctOf95 < 120) {
+    cls='cls-ob1'; label='อ้วน Class 1 (Obesity)';
+    desc=`BMI <b>${bmi.toFixed(1)}</b> · <b>${pctOf95.toFixed(0)}%</b> ของ BMI p95 (${p95.toFixed(1)})<br>เกณฑ์: ≥95th percentile และ &lt;120% ของ BMI p95`;
+  } else if (pctOf95 < 140 && bmi < 35) {
+    cls='cls-ob2'; label='อ้วน Class 2 (Severe Obesity)';
+    desc=`BMI <b>${bmi.toFixed(1)}</b> · <b>${pctOf95.toFixed(0)}%</b> ของ BMI p95 (${p95.toFixed(1)})<br>เกณฑ์: 120%–&lt;140% ของ BMI p95 หรือ BMI ≥35`;
+  } else {
+    cls='cls-ob3'; label='อ้วน Class 3 (Severe Obesity)';
+    desc=`BMI <b>${bmi.toFixed(1)}</b> · <b>${pctOf95.toFixed(0)}%</b> ของ BMI p95 (${p95.toFixed(1)})<br>เกณฑ์: ≥140% ของ BMI p95 หรือ BMI ≥40`;
+  }
+
+  // pointer position บน gradient bar (0-100%)
+  const pos = Math.min(Math.max((pctOf95 / 140) * 100, 2), 98);
+
+  return {cls, label, desc, pctOf95, p95, bmi, pos, approxPct};
+}
+
+function bmiActualClass(bmi, p50, p95) {
+  // จำแนก BMI จริงของเด็ก (ปกติ/เกิน/อ้วน)
+  const pctOf95 = (bmi / p95) * 100;
+  if (pctOf95 < 85/95*100) {
+    return {cls:'cls-healthy', label:'น้ำหนักปกติ', desc:`BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² อยู่ในเกณฑ์ปกติ (< 85th percentile)`};
+  } else if (pctOf95 < 100) {
+    return {cls:'cls-over', label:'น้ำหนักเกิน (Overweight)', desc:`BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² อยู่ระหว่าง 85th–95th percentile`};
+  } else if (pctOf95 < 120) {
+    return {cls:'cls-ob1', label:'อ้วน Class 1', desc:`BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² ≥ 95th percentile (<b>${pctOf95.toFixed(0)}%</b> ของ BMI p95)`};
+  } else if (pctOf95 < 140 && bmi < 35) {
+    return {cls:'cls-ob2', label:'อ้วน Class 2', desc:`BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² = <b>${pctOf95.toFixed(0)}%</b> ของ BMI p95`};
+  } else {
+    return {cls:'cls-ob3', label:'อ้วน Class 3', desc:`BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² = <b>${pctOf95.toFixed(0)}%</b> ของ BMI p95`};
+  }
+}
+
+function bmiP50Class(p50, p95) {
+  // BMI p50 ของเด็กอ้วนคนนี้ → ใช้คำนวณ IBW → ปกติเสมอ แต่แสดงเพื่อ context
+  const pctOf95 = (p50 / p95) * 100;
+  // p50 มักอยู่ต่ำกว่า p95 เสมอ = ปกติ
+  return {
+    cls: 'cls-healthy',
+    label: 'น้ำหนักปกติ (ค่าเป้าหมาย)',
+    desc: `BMI p50 <b>${p50.toFixed(1)}</b> kg/m² คือเกณฑ์ปกติของเด็กเพศ/อายุนี้ · ใช้คำนวณ IBW`
+  };
+}
+
+function renderObesityClass(bmi, age, sex) {
+  const p50 = B50[sex][Math.min(Math.max(Math.round(age),2),20)];
+  const p95 = BMI95[sex][Math.min(Math.max(Math.round(age),2),20)];
+  const rActual = bmiActualClass(bmi, p50, p95);
+  const rP50    = bmiP50Class(p50, p95);
+
+  document.getElementById('obese-result-box').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div class="obese-result ${rActual.cls}">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:6px;">BMI จริง (${bmi.toFixed(1)} kg/m²)</div>
+        <div class="obese-badge">${rActual.label}</div>
+        <div class="obese-detail">${rActual.desc}</div>
+      </div>
+
+      <div class="obese-result ${rP50.cls}">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:6px;">BMI p50 (${p50.toFixed(1)} kg/m²)</div>
+        <div class="obese-badge">${rP50.label}</div>
+        <div class="obese-detail">${rP50.desc}</div>
+      </div>
+
+    </div>`;
+}
+
 </script>
 </body>
 </html>
