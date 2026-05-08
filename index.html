@@ -179,6 +179,10 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
     รายการยา
   </button>
+  <button class="bn" onclick="nav('pg-ref')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    อ้างอิง
+  </button>
 </div>
 
 <!-- ════ PAGE 1: ผู้ป่วย ════ -->
@@ -256,12 +260,55 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
             <tr><td>Obesity (Class 3)</td><td>≥ 140% ของ BMI₉₅ หรือ BMI ≥ 40</td></tr>
           </tbody>
         </table>
-        <p style="font-size:11px;color:var(--t3);margin-top:8px;line-height:1.7;">
-          อ้างอิง: CDC (2024) Child and Teen BMI Categories<br>
-          <a href="https://www.cdc.gov/bmi/child-teen-calculator/bmi-categories.html" target="_blank"
-             style="color:var(--blue);">cdc.gov/bmi/child-teen-calculator/bmi-categories.html</a><br>
-          American Academy of Pediatrics (AAP) 2023 · NHLBI
-        </p>
+
+      </details>
+    </div>
+
+    <!-- Snoring/OSA assessment — shown only when obesity detected -->
+    <div class="card" id="snoring-card" style="display:none;" >
+      <div class="ct">ประเมินภาวะนอนกรน / OSA</div>
+
+      <!-- Protocol banner -->
+      <div style="background:var(--asoft);border:1px solid #f0c070;border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--amber);margin-bottom:14px;line-height:1.8;">
+        ⚠️ <b>Protocol:</b> เด็กที่มี BMI ≥ 85th percentile ควรได้รับการคัดกรอง OSA ทุกราย · พบสูงถึง <b>60%</b> ในเด็กอ้วน<br>
+
+      </div>
+
+      <!-- PSQ section -->
+      <div id="tool-psq" style="display:block;">
+        <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.7;">
+          Score = ใช่ ÷ ข้อที่ตอบ · <b>Cutoff ≥ 0.33</b> → สงสัย OSA · <b>≥ 0.65</b> → Moderate–Severe
+        </div>
+        <div id="psq-questions"></div>
+        <button onclick="evalPSQ()"
+          style="width:100%;padding:12px;font-size:14px;font-weight:600;font-family:inherit;
+          background:var(--blue);color:white;border:none;border-radius:var(--r);cursor:pointer;margin-top:8px;">
+          คำนวณคะแนน PSQ
+        </button>
+        <div id="psq-result" style="display:none;margin-top:12px;"></div>
+  
+      </div>
+
+      <!-- Protocol steps -->
+      <details style="margin-top:12px;">
+        <summary style="font-size:12px;color:var(--t2);cursor:pointer;font-weight:600;">ดู Protocol การจัดการ OSA ในเด็กอ้วน</summary>
+        <div style="margin-top:10px;font-size:12px;color:var(--t2);line-height:2.0;background:var(--s2);border-radius:var(--r);padding:12px;">
+          <b>Step 1 — คัดกรอง (Screening)</b><br>
+          · ซักประวัตินอนกรน หายใจลำบากขณะหลับ ง่วงนอนกลางวันทุกราย<br>
+          · BMI ≥ 85th percentile → screen ทุกราย<br><br>
+          <b>Step 2 — ประเมินความเสี่ยง</b><br>
+          · ถ้าสงสัย OSA → ส่ง Polysomnography (PSG) เพื่อยืนยัน<br>
+          · ถ้า PSG ไม่พร้อม → ส่ง Pulse oximetry overnight<br><br>
+          <b>Step 3 — การรักษา</b><br>
+          · Mild OSA + Adenotonsillar hypertrophy → พิจารณา Adenotonsillectomy<br>
+          · Moderate-Severe OSA → CPAP/BiPAP<br>
+          · ทุกราย → ลดน้ำหนัก (Weight management program)<br><br>
+          <b>Step 4 — ติดตาม</b><br>
+          · Re-evaluate หลังลดน้ำหนักหรือหลังผ่าตัด<br>
+          · ตรวจ BP, ECG ถ้าสงสัย pulmonary hypertension<br><br>
+          <span style="opacity:.65;">Ref: AAP Clinical Practice Guideline 2012 (Pediatrics 130:576) ·
+          Scoping Review PMID 38355893 · AASM Guidelines</span>
+        </div>
       </details>
     </div>
     <button class="btn" onclick="nav('pg-dose')">ไปคำนวณ Dose →</button>
@@ -383,12 +430,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
       <tbody id="lb-misc"></tbody></table>
     </div>
   </div>
-  <p class="ref">
-    อ้างอิง: ภญ.สุนันทา เมรุ · DRUG DOSING FOR OBESE PEDIATRIC PATIENTS<br>
-    Sawang Daen Din Hospital · ปีที่ 2 ฉบับ 5 มกราคม 2564<br>
-    IBW = BMI ที่ 50th percentile × ส่วนสูง(m)²<br>
-    โปรแกรมนี้ใช้ประกอบการตัดสินใจทางคลินิกเท่านั้น
-  </p>
+
 </div>
 </div>
 
@@ -486,9 +528,10 @@ function nav(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   document.querySelectorAll('.bn').forEach((b,i)=>
-    b.classList.toggle('on',['pg-pt','pg-dose','pg-list'][i]===id));
+    b.classList.toggle('on',['pg-pt','pg-dose','pg-list','pg-ref'][i]===id));
   if(id==='pg-dose') refreshDose();
   if(id==='pg-list') renderList();
+  if(id==='pg-ref') {} // static page
 }
 
 function calcWt(){
@@ -746,6 +789,7 @@ function renderObesityClass(bmi, age, sex) {
   const rActual = bmiActualClass(bmi, p50, p95);
   const rP50    = bmiP50Class(p50, p95);
 
+  showSnoringIfObese(bmi, p95);
   document.getElementById('obese-result-box').innerHTML = `
     <div style="display:flex;flex-direction:column;gap:10px;">
 
@@ -764,6 +808,362 @@ function renderObesityClass(bmi, age, sex) {
     </div>`;
 }
 
+
+// ══════════════════════════════════════════════════════════
+// OSA Screening — 2-Step Protocol สำหรับร้านยา
+// Step 1: I'M SLEEPY (8 ข้อ) — Halal et al. 2014, Sensitivity 82%
+// Step 2: PSQ-SRBD (22 ข้อ) — Chervin et al. 2000, AUC 0.88
+// เงื่อนไข: Step 2 ขึ้นเมื่อ Step 1 = Moderate + มี key symptom
+// ══════════════════════════════════════════════════════════
+
+// ── I'M SLEEPY 8 ข้อ (Halal et al. 2014, PMID 25305064)
+// I = Inattention, M = Mouth breathing, S = Snoring, L = Large tonsils (ไม่ประเมินในร้านยา)
+// E = Excessive daytime sleepiness, E = Enuresis, P = Pauses in breathing, Y = Years < 7
+// ดัดแปลงให้เภสัชกรในร้านยาใช้ได้ (ตัด L ออก ใส่ behavioral แทน)
+const IM_SLEEPY = [
+  {
+    id:'im1', key:'S',
+    text:'เด็กกรนเสียงดังเกือบทุกคืน (≥ 3 คืน/สัปดาห์)?',
+    weight: 2,  // key symptom — double weight
+    hint:'กรนเป็น hallmark symptom ของ OSA ในเด็ก'
+  },
+  {
+    id:'im2', key:'P',
+    text:'ผู้ปกครองเคยสังเกตเห็นเด็กหยุดหายใจขณะนอนหลับ?',
+    weight: 3,  // strongest predictor — triple weight
+    hint:'Witnessed apnea = สัญญาณสำคัญที่สุด ต้องส่งพบแพทย์'
+  },
+  {
+    id:'im3', key:'M',
+    text:'เด็กหายใจทางปากเป็นประจำทั้งกลางวันและกลางคืน?',
+    weight: 1,
+    hint:'Mouth breathing บ่งชี้การอุดกั้นทางเดินหายใจส่วนบน'
+  },
+  {
+    id:'im4', key:'E1',
+    text:'เด็กง่วงนอนมากผิดปกติในเวลากลางวัน หรือง่วงขณะทำกิจกรรม?',
+    weight: 1,
+    hint:'Excessive daytime sleepiness พบ 40% ในเด็กอ้วนที่มี OSA'
+  },
+  {
+    id:'im5', key:'I',
+    text:'ครูหรือผู้ดูแลรายงานว่าเด็กมีปัญหาสมาธิหรือพฤติกรรมก้าวร้าว?',
+    weight: 1,
+    hint:'OSA ส่งผลต่อ neurocognitive function — ADHD-like symptoms'
+  },
+  {
+    id:'im6', key:'E2',
+    text:'เด็กปัสสาวะรดที่นอน (Enuresis) หลังอายุ 5 ปี?',
+    weight: 1,
+    hint:'Enuresis พบ ~10% ในเด็กที่มี OSA จาก arousal mechanism'
+  },
+  {
+    id:'im7', key:'R',
+    text:'เด็กนอนกระสับกระส่าย พลิกตัวบ่อย หรือนอนท่าผิดปกติ (คอแอ่น)?',
+    weight: 1,
+    hint:'Restless sleep = การพยายามเปิดทางเดินหายใจขณะนอน'
+  },
+  {
+    id:'im8', key:'W',
+    text:'เด็กตื่นนอนตอนเช้าแล้วปวดศีรษะ หรือรู้สึกไม่สดชื่น?',
+    weight: 1,
+    hint:'Morning headache จาก hypercapnia ขณะนอน'
+  },
+];
+
+// ── PSQ-SRBD 22 ข้อ (Chervin et al. 2000, Sleep Medicine 1:21–32)
+// Validated cutoff: Score ≥ 0.33 → สงสัย OSA (Sensitivity 78%, Specificity 72%)
+// ในเด็กอ้วน: cutoff ≥ 0.65 → Sensitivity 80%, Specificity 100% (PMC9497855)
+const PSQ_QS = [
+  // Domain 1: Snoring & Breathing (1-6) — Chervin et al. / UC Davis PSQ
+  {id:'p1',  domain:'snoring', text:'เด็กกรนมากกว่าครึ่งหนึ่งของเวลาที่นอนหลับ?'},
+  {id:'p2',  domain:'snoring', text:'เด็กกรนตลอดเวลาขณะนอน?'},
+  {id:'p3',  domain:'snoring', text:'เด็กกรนเสียงดัง?'},
+  {id:'p4',  domain:'snoring', text:'เด็กหายใจหนักหรือมีเสียงดังขณะนอน?'},
+  {id:'p5',  domain:'snoring', text:'เด็กมีปัญหาการหายใจหรือดูเหมือนหายใจลำบากขณะนอน?'},
+  {id:'p6',  domain:'snoring', text:'เคยเห็นเด็กหยุดหายใจขณะนอนหลับกลางดึก?'},
+  // Domain 2: Mouth breathing & morning symptoms (7-10)
+  {id:'p7',  domain:'breath',  text:'เด็กมักหายใจทางปากในเวลากลางวัน?'},
+  {id:'p8',  domain:'breath',  text:'เด็กตื่นนอนแล้วรู้สึกปากแห้ง?'},
+  {id:'p9',  domain:'breath',  text:'เด็กเคยปัสสาวะรดที่นอน?'},
+  {id:'p10', domain:'breath',  text:'เด็กตื่นนอนแล้วรู้สึกไม่สดชื่น?'},
+  // Domain 3: Daytime sleepiness (11-14)
+  {id:'p11', domain:'sleepy',  text:'เด็กมีปัญหาง่วงนอนมากในเวลากลางวัน?'},
+  {id:'p12', domain:'sleepy',  text:'ครูหรือผู้ดูแลบอกว่าเด็กดูง่วงนอนระหว่างวัน?'},
+  {id:'p13', domain:'sleepy',  text:'ปลุกเด็กให้ตื่นตอนเช้าได้ยาก?'},
+  {id:'p14', domain:'sleepy',  text:'เด็กตื่นนอนแล้วปวดศีรษะตอนเช้า?'},
+  // Domain 4: Growth & weight (15-16)
+  {id:'p15', domain:'growth',  text:'เด็กหยุดเจริญเติบโตตามปกติตั้งแต่แรกเกิดจนถึงปัจจุบัน?'},
+  {id:'p16', domain:'growth',  text:'เด็กมีน้ำหนักเกินเกณฑ์?'},
+  // Domain 5: Behavior / Inattention (17-22) — ADHD-like symptoms from OSA
+  {id:'p17', domain:'behav',   text:'เด็กดูเหมือนไม่ฟังเมื่อพูดด้วยโดยตรง?'},
+  {id:'p18', domain:'behav',   text:'เด็กมีปัญหาในการจัดระเบียบงานหรือกิจกรรม?'},
+  {id:'p19', domain:'behav',   text:'เด็กวอกแวกง่ายเมื่อมีสิ่งเร้าภายนอก?'},
+  {id:'p20', domain:'behav',   text:'เด็กนั่งไม่นิ่ง ขยุกขยิกมือหรือเท้า หรือลุกลนอยู่ตลอด?'},
+  {id:'p21', domain:'behav',   text:'เด็กซุกซนมาก ดูเหมือนมีพลังงานไม่หมด?'},
+  {id:'p22', domain:'behav',   text:'เด็กขัดจังหวะหรือแทรกแซงผู้อื่นบ่อย (เช่น พูดแทรก เล่นแทรก)?'},
+];
+
+const DOMAIN_LABEL = {
+  snoring: '🔊 การกรน / การหายใจ',
+  breath:  '💧 การหายใจทางปาก / อาการตื่นนอน',
+  sleepy:  '😴 ความง่วงนอนกลางวัน',
+  growth:  '📏 การเจริญเติบโต / น้ำหนัก',
+  behav:   '⚡ พฤติกรรม / สมาธิ',
+};
+
+
+function showSnoringIfObese(bmi, p95) {
+  const card = document.getElementById('snoring-card');
+  card.style.display = 'block';
+  buildPSQQuestions();
+  document.getElementById('psq-result').style.display = 'none';
+}
+function showTool(tool) {
+  // PSQ only — function kept for compatibility
+  buildPSQQuestions();
+  const psqEl = document.getElementById('psq-result');
+  if (psqEl) psqEl.style.display = 'none';
+}
+
+function buildSnoringQuestions() {
+  const el = document.getElementById('snoring-questions');
+  el.innerHTML = IM_SLEEPY.map((q, i) => `
+    <div style="margin-bottom:9px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);">
+      <div style="font-size:13px;color:var(--t1);margin-bottom:4px;font-weight:500;">
+        ${i+1}. ${q.text}
+        ${q.weight >= 2 ? `<span style="font-size:10px;background:var(--rs);color:var(--red);padding:1px 5px;border-radius:4px;margin-left:4px;font-weight:700;">สำคัญ</span>` : ''}
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:7px;">${q.hint}</div>
+      <div style="display:flex;gap:10px;">
+        <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="radio" name="${q.id}" value="1"> ใช่</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="radio" name="${q.id}" value="0"> ไม่ใช่</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="radio" name="${q.id}" value="-1"> ไม่แน่ใจ</label>
+      </div>
+    </div>`).join('');
+}
+
+function buildPSQQuestions() {
+  let lastDomain = '';
+  const el = document.getElementById('psq-questions');
+  el.innerHTML = PSQ_QS.map((q, i) => {
+    let header = '';
+    if (q.domain !== lastDomain) {
+      lastDomain = q.domain;
+      header = `<div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;
+        letter-spacing:.05em;margin:12px 0 6px;">${DOMAIN_LABEL[q.domain]}</div>`;
+    }
+    return `${header}
+      <div style="margin-bottom:8px;padding:9px 11px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);">
+        <div style="font-size:12px;color:var(--t1);margin-bottom:6px;">${i+1}. ${q.text}</div>
+        <div style="display:flex;gap:10px;">
+          <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;"><input type="radio" name="${q.id}" value="1"> ใช่</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;"><input type="radio" name="${q.id}" value="0"> ไม่ใช่</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;"><input type="radio" name="${q.id}" value="-1"> ไม่แน่ใจ</label>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function evalSnoring() {
+  let score = 0, yesCount = 0, unanswered = 0;
+  const apnea  = document.querySelector('input[name="im2"]:checked')?.value === '1';
+  const snore  = document.querySelector('input[name="im1"]:checked')?.value === '1';
+
+  IM_SLEEPY.forEach(q => {
+    const val = document.querySelector(`input[name="${q.id}"]:checked`);
+    if (!val) { unanswered++; return; }
+    if (val.value === '1') { score += q.weight; yesCount++; }
+  });
+
+  if (unanswered > 0) {
+    alert(`กรุณาตอบให้ครบทุกข้อ (ยังขาดอีก ${unanswered} ข้อ)`);
+    return;
+  }
+
+  // max score = 2+3+1+1+1+1+1+1 = 11
+  // High Risk: apnea หรือ score ≥ 6
+  // Moderate-High (ต้องทำ PSQ): score 3-5 + มี snore หรือ apnea
+  // Moderate: score 2-5 ไม่มี key symptom
+  // Low: score 0-1
+
+  let risk, cls, rec, needPSQ = false;
+
+  if (apnea || score >= 6) {
+    risk = 'ความเสี่ยงสูง (High Risk)';
+    cls  = 'cls-ob2';
+    rec  = `<b>แนะนำส่งพบแพทย์ทันที:</b><br>
+      · พิจารณาส่ง <b>Polysomnography (PSG)</b> เพื่อยืนยัน<br>
+      · ตรวจ Pulse oximetry overnight ถ้า PSG ไม่พร้อม<br>
+      · ประเมิน Adenotonsillar hypertrophy<br>
+      · ตรวจ BP และ ECG ถ้าสงสัย complication`;
+    needPSQ = false;
+  } else if ((snore || score >= 3) && score < 6) {
+    // Moderate + key signal → ทำ PSQ ต่อ
+    risk = 'ความเสี่ยงปานกลาง — ต้องประเมินเพิ่มเติม';
+    cls  = 'cls-ob1';
+    rec  = `พบอาการที่ต้องประเมินเพิ่ม · กรุณาทำ <b>PSQ-SRBD</b> ด้านล่างเพื่อความแม่นยำ`;
+    needPSQ = true;
+  } else if (score >= 2) {
+    risk = 'ความเสี่ยงปานกลาง (Moderate Risk)';
+    cls  = 'cls-ob1';
+    rec  = `<b>แนะนำ:</b><br>
+      · ติดตามอาการและซักประวัติซ้ำในครั้งถัดไป<br>
+      · แนะนำผู้ปกครองบันทึกอาการและสังเกตการหายใจขณะนอน<br>
+      · พิจารณาส่งพบแพทย์ถ้าอาการไม่ดีขึ้นใน 1–2 เดือน`;
+    needPSQ = false;
+  } else {
+    risk = 'ความเสี่ยงต่ำ (Low Risk)';
+    cls  = 'cls-healthy';
+    rec  = `<b>แนะนำ:</b><br>
+      · คัดกรองซ้ำทุกครั้งที่มาร้านยา<br>
+      · แนะนำให้สังเกตอาการนอนกรนต่อเนื่อง<br>
+      · ให้ความรู้เรื่องการจัดการน้ำหนักในเด็ก`;
+    needPSQ = false;
+  }
+
+  const resEl = document.getElementById('snoring-result');
+  resEl.style.display = 'block';
+  resEl.innerHTML = `
+    <div class="obese-result ${cls}" style="margin-bottom:${needPSQ?'12px':'0'};">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:6px;">
+        I'M SLEEPY · คะแนน ${score}/11 · ตอบใช่ ${yesCount}/8 ข้อ
+      </div>
+      <div class="obese-badge">${risk}</div>
+      <div class="obese-detail" style="margin-top:8px;">${rec}</div>
+
+    </div>
+    ${needPSQ ? buildPSQSection() : ''}`;
+  resEl.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function evalPSQ() {
+  let yes = 0, answered = 0;
+  PSQ_QS.forEach(q => {
+    const val = document.querySelector(`input[name="${q.id}"]:checked`);
+    if (!val || val.value === '-1') return;
+    answered++;
+    if (val.value === '1') yes++;
+  });
+
+  if (answered < 18) {
+    alert(`กรุณาตอบให้ครบ (ตอบแล้ว ${answered}/22 ข้อ · ต้องตอบอย่างน้อย 18 ข้อ)`);
+    return;
+  }
+
+  const score = yes / answered;
+
+  let cls, badge, rec;
+  if (score >= 0.65) {
+    cls   = 'cls-ob2';
+    badge = `⚠️ สงสัย Moderate–Severe OSA (PSQ = ${score.toFixed(2)})`;
+    rec   = `ตอบใช่ ${yes}/${answered} ข้อ · Score <b>${score.toFixed(2)}</b> ≥ 0.65<br><br>
+      <b>แนะนำส่งพบแพทย์ทันที:</b><br>
+      · ส่ง <b>Polysomnography (PSG)</b> เพื่อยืนยันและประเมินความรุนแรง<br>
+      · พิจารณา Pulse oximetry overnight ถ้า PSG ไม่พร้อม<br>
+      · ประเมิน Adenotonsillar hypertrophy`;
+  } else if (score >= 0.33) {
+    cls   = 'cls-ob1';
+    badge = `⚠️ สงสัย OSA (PSQ = ${score.toFixed(2)})`;
+    rec   = `ตอบใช่ ${yes}/${answered} ข้อ · Score <b>${score.toFixed(2)}</b> ≥ 0.33<br><br>
+      <b>แนะนำ:</b><br>
+      · ส่งพบแพทย์เพื่อประเมินเพิ่มเติม<br>
+      · พิจารณาส่ง Pulse oximetry overnight<br>
+      · ติดตามอาการอย่างใกล้ชิด`;
+  } else {
+    cls   = 'cls-healthy';
+    badge = `✓ ไม่น่าสงสัย OSA (PSQ = ${score.toFixed(2)})`;
+    rec   = `ตอบใช่ ${yes}/${answered} ข้อ · Score <b>${score.toFixed(2)}</b> < 0.33<br><br>
+      <b>แนะนำ:</b><br>
+      · คัดกรองซ้ำในการมาครั้งถัดไป<br>
+      · ติดตามการเปลี่ยนแปลงของอาการ<br>
+      · จัดการน้ำหนักตัวต่อเนื่อง`;
+  }
+
+  const psqEl = document.getElementById('psq-result');
+  psqEl.style.display = 'block';
+  psqEl.innerHTML = `
+    <div class="obese-result ${cls}" style="margin-bottom:0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:6px;">ผล PSQ-SRBD</div>
+      <div class="obese-badge">${badge}</div>
+      <div class="obese-detail" style="margin-top:8px;">${rec}</div>
+    </div>`;
+  psqEl.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
 </script>
+
+<!-- ════ PAGE 4: อ้างอิง ════ -->
+<div class="page" id="pg-ref">
+<div class="wrap">
+
+  <div class="card">
+    <div class="ct">การคำนวณน้ำหนัก</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+      <b>IBW</b> = BMI ที่ 50th percentile × ส่วนสูง(m)²<br>
+      <b>LBM</b> = IBW + 0.29 × (TBW − IBW)<br>
+      <b>AdjBW</b> = IBW + Correction Factor × (TBW − IBW)<br><br>
+      ภญ.สุนันทา เมรุ · <i>Drug Dosing for Obese Pediatric Patients</i><br>
+      โรงพยาบาลสว่างแดนดิน · ปีที่ 2 ฉบับ 5 มกราคม 2564<br>
+      <a href="https://swdcph.moph.go.th" target="_blank" style="color:var(--blue);font-size:12px;">swdcph.moph.go.th</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">การจำแนกภาวะน้ำหนัก</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+      CDC (2024) · Child and Teen BMI Categories<br>
+      <a href="https://www.cdc.gov/bmi/child-teen-calculator/bmi-categories.html" target="_blank" style="color:var(--blue);font-size:12px;">cdc.gov/bmi/child-teen-calculator</a><br><br>
+      American Academy of Pediatrics (AAP) 2023<br>
+      National Heart, Lung, and Blood Institute (NHLBI)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">การคัดกรอง OSA — I'M SLEEPY</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+      Halal CSE & Nunes ML (2014)<br>
+      <i>I'M SLEEPY: A short pediatric sleep apnea questionnaire</i><br>
+      Int J Pediatr Otorhinolaryngol · Sensitivity 82%, Specificity 50%<br>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/25305064/" target="_blank" style="color:var(--blue);font-size:12px;">PMID 25305064</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">การคัดกรอง OSA — PSQ-SRBD</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+      Chervin RD et al. (2000)<br>
+      <i>Pediatric Sleep Questionnaire (PSQ): validity and reliability of scales for sleep-disordered breathing</i><br>
+      Sleep Medicine 1:21–32 · Cutoff ≥ 0.33<br>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/10733617/" target="_blank" style="color:var(--blue);font-size:12px;">PMID 10733617</a><br><br>
+      Ferrini G et al. (2022)<br>
+      <i>PSQ Predicts Moderate-to-Severe OSA in Children with Obesity</i><br>
+      AUC 0.88 · Cutoff ≥ 0.65 (Sens 80%, Spec 100% ในเด็กอ้วน)<br>
+      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9497855/" target="_blank" style="color:var(--blue);font-size:12px;">PMC9497855</a><br><br>
+      UC Davis Health · Children's Hospital<br>
+      <i>Pediatric Sleep Questionnaire (PSQ) — Official Form</i><br>
+      <a href="https://health.ucdavis.edu/cht/documents/pediatric-sleep-questionnaire.pdf" target="_blank" style="color:var(--blue);font-size:12px;">health.ucdavis.edu/cht/documents/pediatric-sleep-questionnaire.pdf</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Protocol OSA ในเด็กอ้วน</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+      AAP Clinical Practice Guideline (2012)<br>
+      <i>Diagnosis and Management of Childhood Obstructive Sleep Apnea Syndrome</i><br>
+      Pediatrics 130:576<br>
+      <a href="https://publications.aap.org/pediatrics/article/130/3/576/30284" target="_blank" style="color:var(--blue);font-size:12px;">doi:10.1542/peds.2012-1672</a><br><br>
+      Scoping Review (2024) · PMID 38355893<br>
+      <i>Screening for OSA in children and adolescents with obesity</i>
+    </div>
+  </div>
+
+  <div style="font-size:12px;color:var(--t3);text-align:center;padding:16px;line-height:1.9;">
+    โปรแกรมนี้ใช้ประกอบการตัดสินใจทางคลินิกเท่านั้น<br>
+    ไม่สามารถใช้แทนการวินิจฉัยโดยแพทย์หรือเภสัชกร
+  </div>
+
+</div>
+</div>
 </body>
 </html>
