@@ -161,11 +161,12 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
 <body>
 
 <div class="hdr" style="display:flex;align-items:center;gap:12px;padding:10px 16px;">
-  <img src="logo-03.png" alt="ศิวพร เภสัช" style="height:52px;width:52px;object-fit:contain;border-radius:50%;background:white;flex-shrink:0;">
-  <div>
+  <img src="logo-03.png" alt="Logo 1" style="height:52px;width:52px;object-fit:contain;border-radius:50%;background:white;flex-shrink:0;">
+  <div style="flex:1;">
     <h1>Obese Peds · Dose Calculator</h1>
     <p>BMI ≥ 95th percentile · Ref: ภญ.สุนันทา เมรุ, swdcph.moph.go.th</p>
   </div>
+  <img src="logo-02.png" alt="Logo 2" style="height:52px;width:52px;object-fit:contain;border-radius:50%;background:white;flex-shrink:0;">
 </div>
 <div style="background:#2a7a4a;color:white;text-align:center;padding:6px 16px;font-size:13px;font-weight:600;letter-spacing:0.05em;">
   สำหรับเภสัชกรร้านยา
@@ -186,8 +187,8 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
     รายการยา
   </button>
   <button class="bn" onclick="nav('pg-ref')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-    อ้างอิง
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>
+    Other
   </button>
 </div>
 
@@ -1099,13 +1100,29 @@ function evalPSQ() {
 
 </script>
 
-<!-- ════ PAGE 4: อ้างอิง ════ -->
+<!-- ════ PAGE 4: Other ════ -->
 <div class="page" id="pg-ref">
 <div class="wrap">
 
+  <!-- ผู้จัดทำ -->
   <div class="card">
-    <div class="ct">การคำนวณน้ำหนัก</div>
-    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+    <div class="ct">ผู้จัดทำ</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.2;">
+      <b style="font-size:15px;color:var(--text);">นาย ธนศิลป์ เปาอินทร์</b>
+      <b style="font-size:15px;color:var(--text);">นางสาว วิมลยา แสงวิ</b>
+      <span style="color:var(--t3);">ผู้พัฒนาโปรแกรม Obese Peds Dose Calculator</span><br><br>
+      <b>ติดต่อ / Feedback</b><br>
+      📧 <a href="mailto:" style="color:var(--blue);">อีเมล</a><br>
+      📱 LINE: @...
+    </div>
+  </div>
+
+  <!-- ข้อมูลอ้างอิง -->
+  <div class="card">
+    <div class="ct">ข้อมูลอ้างอิง</div>
+
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:8px;">การคำนวณน้ำหนัก</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;margin-bottom:14px;">
       <b>IBW</b> = BMI ที่ 50th percentile × ส่วนสูง(m)²<br>
       <b>LBM</b> = IBW + 0.29 × (TBW − IBW)<br>
       <b>AdjBW</b> = IBW + Correction Factor × (TBW − IBW)<br><br>
@@ -1113,31 +1130,28 @@ function evalPSQ() {
       โรงพยาบาลสว่างแดนดิน · ปีที่ 2 ฉบับ 5 มกราคม 2564<br>
       <a href="https://swdcph.moph.go.th" target="_blank" style="color:var(--blue);font-size:12px;">swdcph.moph.go.th</a>
     </div>
-  </div>
 
-  <div class="card">
-    <div class="ct">การจำแนกภาวะน้ำหนัก</div>
-    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+    <div style="border-top:1px solid var(--border);margin-bottom:14px;"></div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:8px;">การจำแนกภาวะน้ำหนัก</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;margin-bottom:14px;">
       CDC (2024) · Child and Teen BMI Categories<br>
       <a href="https://www.cdc.gov/bmi/child-teen-calculator/bmi-categories.html" target="_blank" style="color:var(--blue);font-size:12px;">cdc.gov/bmi/child-teen-calculator</a><br><br>
       American Academy of Pediatrics (AAP) 2023<br>
       National Heart, Lung, and Blood Institute (NHLBI)
     </div>
-  </div>
 
-  <div class="card">
-    <div class="ct">การคัดกรอง OSA — I'M SLEEPY</div>
-    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+    <div style="border-top:1px solid var(--border);margin-bottom:14px;"></div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:8px;">การคัดกรอง OSA — I'M SLEEPY</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;margin-bottom:14px;">
       Halal CSE & Nunes ML (2014)<br>
       <i>I'M SLEEPY: A short pediatric sleep apnea questionnaire</i><br>
       Int J Pediatr Otorhinolaryngol · Sensitivity 82%, Specificity 50%<br>
       <a href="https://pubmed.ncbi.nlm.nih.gov/25305064/" target="_blank" style="color:var(--blue);font-size:12px;">PMID 25305064</a>
     </div>
-  </div>
 
-  <div class="card">
-    <div class="ct">การคัดกรอง OSA — PSQ-SRBD</div>
-    <div style="font-size:13px;color:var(--t2);line-height:2.0;">
+    <div style="border-top:1px solid var(--border);margin-bottom:14px;"></div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:8px;">การคัดกรอง OSA — PSQ-SRBD</div>
+    <div style="font-size:13px;color:var(--t2);line-height:2.0;margin-bottom:14px;">
       Chervin RD et al. (2000)<br>
       <i>Pediatric Sleep Questionnaire (PSQ): validity and reliability of scales for sleep-disordered breathing</i><br>
       Sleep Medicine 1:21–32 · Cutoff ≥ 0.33<br>
@@ -1150,10 +1164,9 @@ function evalPSQ() {
       <i>Pediatric Sleep Questionnaire (PSQ) — Official Form</i><br>
       <a href="https://health.ucdavis.edu/cht/documents/pediatric-sleep-questionnaire.pdf" target="_blank" style="color:var(--blue);font-size:12px;">health.ucdavis.edu/cht/documents/pediatric-sleep-questionnaire.pdf</a>
     </div>
-  </div>
 
-  <div class="card">
-    <div class="ct">Protocol OSA ในเด็กอ้วน</div>
+    <div style="border-top:1px solid var(--border);margin-bottom:14px;"></div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:8px;">Protocol OSA ในเด็กอ้วน</div>
     <div style="font-size:13px;color:var(--t2);line-height:2.0;">
       AAP Clinical Practice Guideline (2012)<br>
       <i>Diagnosis and Management of Childhood Obstructive Sleep Apnea Syndrome</i><br>
