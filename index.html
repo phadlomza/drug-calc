@@ -272,17 +272,152 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
     </div>
 
     <!-- Snoring/OSA assessment — shown only when obesity detected -->
-    <div class="card" id="snoring-card" style="display:none;" >
+    <div class="card" id="snoring-card" style="display:none;">
       <div class="ct">ประเมินภาวะนอนกรน / OSA</div>
 
       <!-- Protocol banner -->
       <div style="background:var(--asoft);border:1px solid #f0c070;border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--amber);margin-bottom:14px;line-height:1.8;">
-        ⚠️ <b>Protocol:</b> เด็กที่มี BMI ≥ 85th percentile ควรได้รับการคัดกรอง OSA ทุกราย · พบสูงถึง <b>60%</b> ในเด็กอ้วน<br>
-
+        ⚠️ <b>Protocol:</b> เด็กที่มี BMI ≥ 85th percentile ควรได้รับการคัดกรอง OSA ทุกราย · พบสูงถึง <b>60%</b> ในเด็กอ้วน
       </div>
 
-      <!-- PSQ section -->
-      <div id="tool-psq" style="display:block;">
+      <!-- Tool selector buttons -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <button id="btn-sleep-assess" onclick="selectOSATool('sleep')"
+          style="padding:14px 10px;font-size:13px;font-weight:600;font-family:inherit;
+          border:2px solid var(--blue);border-radius:var(--r);background:var(--blue);
+          color:white;cursor:pointer;line-height:1.4;text-align:center;">
+          📋 แบบประเมิน<br><span style="font-weight:400;font-size:11px;">ปัญหาการนอน</span>
+        </button>
+        <button id="btn-psq" onclick="selectOSATool('psq')"
+          style="padding:14px 10px;font-size:13px;font-weight:600;font-family:inherit;
+          border:2px solid var(--border);border-radius:var(--r);background:var(--s2);
+          color:var(--t2);cursor:pointer;line-height:1.4;text-align:center;">
+          📊 PSQ-SRBD<br><span style="font-weight:400;font-size:11px;">22 ข้อ (Chervin 2000)</span>
+        </button>
+      </div>
+
+      <!-- ── TOOL 1: แบบประเมินปัญหาการนอน (ตารางสังเกต) ── -->
+      <div id="tool-sleep" style="display:block;">
+        <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.7;background:var(--bsoft);border-radius:var(--r);padding:10px 12px;">
+          <b>วิธีใช้:</b> ซักถามผู้ปกครองตามหัวข้อสังเกต · ทำเครื่องหมาย ✓ ข้อที่พบ · ≥ 1 ข้อในหมวดใดหมวดหนึ่ง → ควรส่งพบแพทย์
+        </div>
+
+        <!-- หมวด 1: การกรน -->
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+            <span style="background:var(--red);color:white;border-radius:4px;padding:2px 7px;">การกรน (Snoring)</span>
+          </div>
+          <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <thead>
+                <tr style="background:var(--border);">
+                  <th style="padding:7px 10px;text-align:left;color:var(--t2);font-weight:700;width:40%;">หัวข้อสังเกต</th>
+                  <th style="padding:7px 10px;text-align:left;color:var(--t2);font-weight:700;">คำถามสำคัญ</th>
+                  <th style="padding:7px 10px;width:36px;"></th>
+                </tr>
+              </thead>
+              <tbody id="sleep-snoring-body">
+                <tr style="border-top:1px solid var(--border);">
+                  <td style="padding:9px 10px;vertical-align:top;font-weight:600;color:var(--text);">ลูกของคุณกรน</td>
+                  <td style="padding:9px 10px;vertical-align:top;color:var(--t2);line-height:1.7;">
+                    1. ลูกของคุณกรนบ่อยครั้ง (มากกว่าครึ่งของเวลาที่หลับ) หรือไม่?<br>
+                    2. ลูกของคุณกรนเสียงดังหรือไม่?
+                  </td>
+                  <td style="padding:9px 10px;text-align:center;vertical-align:middle;">
+                    <input type="checkbox" id="sl1" style="width:18px;height:18px;cursor:pointer;">
+                  </td>
+                </tr>
+                <tr style="border-top:1px solid var(--border);">
+                  <td style="padding:9px 10px;vertical-align:top;font-weight:600;color:var(--text);">ขณะหลับ</td>
+                  <td style="padding:9px 10px;vertical-align:top;color:var(--t2);line-height:1.7;">
+                    3. ขณะหลับ ลูกดูเหมือนมีอาการ "สำลัก" หรือพยายามจะหายใจแต่หายใจไม่ออกหรือไม่?
+                  </td>
+                  <td style="padding:9px 10px;text-align:center;vertical-align:middle;">
+                    <input type="checkbox" id="sl2" style="width:18px;height:18px;cursor:pointer;">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- หมวด 2: พฤติกรรมกลางวัน -->
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);margin-bottom:8px;">
+            <span style="background:var(--amber);color:white;border-radius:4px;padding:2px 7px;">พฤติกรรมกลางวัน (Daytime Symptoms)</span>
+          </div>
+          <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <thead>
+                <tr style="background:var(--border);">
+                  <th style="padding:7px 10px;text-align:left;color:var(--t2);font-weight:700;width:40%;">หัวข้อสังเกต</th>
+                  <th style="padding:7px 10px;text-align:left;color:var(--t2);font-weight:700;">คำถามสำคัญ</th>
+                  <th style="padding:7px 10px;width:36px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid var(--border);">
+                  <td style="padding:9px 10px;vertical-align:top;font-weight:600;color:var(--text);">ตื่นนอน</td>
+                  <td style="padding:9px 10px;vertical-align:top;color:var(--t2);line-height:1.7;">
+                    4. เมื่อตื่นนอนตอนเช้า ลูกดูไม่สดชื่นหรือปวดหัวหรือไม่?
+                  </td>
+                  <td style="padding:9px 10px;text-align:center;vertical-align:middle;">
+                    <input type="checkbox" id="sl3" style="width:18px;height:18px;cursor:pointer;">
+                  </td>
+                </tr>
+                <tr style="border-top:1px solid var(--border);">
+                  <td style="padding:9px 10px;vertical-align:top;font-weight:600;color:var(--text);">ง่วงกลางวัน</td>
+                  <td style="padding:9px 10px;vertical-align:top;color:var(--t2);line-height:1.7;">
+                    5. ลูกมีอาการง่วงนอนมากผิดปกติในระหว่างวัน (เช่น หลับในห้องเรียน) หรือไม่?
+                  </td>
+                  <td style="padding:9px 10px;text-align:center;vertical-align:middle;">
+                    <input type="checkbox" id="sl4" style="width:18px;height:18px;cursor:pointer;">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- หมวด 3: พฤติกรรมซน -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);margin-bottom:8px;">
+            <span style="background:var(--purple);color:white;border-radius:4px;padding:2px 7px;">พฤติกรรมซน (Attention/Hyperactivity)</span>
+          </div>
+          <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <thead>
+                <tr style="background:var(--border);">
+                  <th style="padding:7px 10px;text-align:left;color:var(--t2);font-weight:700;width:40%;">หัวข้อสังเกต</th>
+                  <th style="padding:7px 10px;text-align:left;color:var(--t2);font-weight:700;">คำถามสำคัญ</th>
+                  <th style="padding:7px 10px;width:36px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid var(--border);">
+                  <td style="padding:9px 10px;vertical-align:top;font-weight:600;color:var(--text);">สมาธิ/ซน</td>
+                  <td style="padding:9px 10px;vertical-align:top;color:var(--t2);line-height:1.7;">
+                    6. ลูกมีปัญหาเรื่องสมาธิสั้น อยู่ไม่นิ่ง หรือชนคนอื่นบ่อยหรือไม่? (ภาวะหยุด หายใจในเด็กในเด็กมักแสดงออกด้วยอาการชนคนอื่น ในเด็กในเด็ก มักแสดงออกด้วยอาการชนเด็ก แทนที่จะง่วงซึม)
+                  </td>
+                  <td style="padding:9px 10px;text-align:center;vertical-align:middle;">
+                    <input type="checkbox" id="sl5" style="width:18px;height:18px;cursor:pointer;">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <button onclick="evalSleepAssess()"
+          style="width:100%;padding:12px;font-size:14px;font-weight:600;font-family:inherit;
+          background:var(--red);color:white;border:none;border-radius:var(--r);cursor:pointer;">
+          ประเมินผล
+        </button>
+        <div id="sleep-assess-result" style="display:none;margin-top:12px;"></div>
+      </div>
+
+      <!-- ── TOOL 2: PSQ-SRBD ── -->
+      <div id="tool-psq" style="display:none;">
         <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.7;">
           Score = ใช่ ÷ ข้อที่ตอบ · <b>Cutoff ≥ 0.33</b> → สงสัย OSA · <b>≥ 0.65</b> → Moderate–Severe
         </div>
@@ -293,7 +428,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
           คำนวณคะแนน PSQ
         </button>
         <div id="psq-result" style="display:none;margin-top:12px;"></div>
-  
       </div>
 
       <!-- Protocol steps -->
@@ -925,12 +1059,86 @@ function showSnoringIfObese(bmi, p95) {
   card.style.display = 'block';
   buildPSQQuestions();
   document.getElementById('psq-result').style.display = 'none';
+  // default: show sleep assessment tool
+  selectOSATool('sleep');
 }
-function showTool(tool) {
-  // PSQ only — function kept for compatibility
-  buildPSQQuestions();
-  const psqEl = document.getElementById('psq-result');
-  if (psqEl) psqEl.style.display = 'none';
+
+function selectOSATool(tool) {
+  const sleepEl = document.getElementById('tool-sleep');
+  const psqEl   = document.getElementById('tool-psq');
+  const btnSleep = document.getElementById('btn-sleep-assess');
+  const btnPSQ   = document.getElementById('btn-psq');
+
+  if (tool === 'sleep') {
+    sleepEl.style.display = 'block';
+    psqEl.style.display   = 'none';
+    btnSleep.style.background    = 'var(--blue)';
+    btnSleep.style.color         = 'white';
+    btnSleep.style.borderColor   = 'var(--blue)';
+    btnPSQ.style.background      = 'var(--s2)';
+    btnPSQ.style.color           = 'var(--t2)';
+    btnPSQ.style.borderColor     = 'var(--border)';
+  } else {
+    sleepEl.style.display = 'none';
+    psqEl.style.display   = 'block';
+    btnPSQ.style.background      = 'var(--blue)';
+    btnPSQ.style.color           = 'white';
+    btnPSQ.style.borderColor     = 'var(--blue)';
+    btnSleep.style.background    = 'var(--s2)';
+    btnSleep.style.color         = 'var(--t2)';
+    btnSleep.style.borderColor   = 'var(--border)';
+  }
+}
+
+function evalSleepAssess() {
+  const checked = ['sl1','sl2','sl3','sl4','sl5'].filter(id => document.getElementById(id)?.checked);
+  const count = checked.length;
+
+  // จำแนกตามหมวด
+  const snoring = ['sl1','sl2'].some(id => document.getElementById(id)?.checked);
+  const daytime = ['sl3','sl4'].some(id => document.getElementById(id)?.checked);
+  const hyperact = document.getElementById('sl5')?.checked;
+
+  let cls, badge, detail;
+
+  if (snoring && (daytime || hyperact)) {
+    cls    = 'cls-ob2';
+    badge  = '⚠️ ความเสี่ยงสูง — ควรส่งพบแพทย์';
+    detail = `พบอาการ <b>${count}/5 ข้อ</b> ครอบคลุมหลายหมวด<br><br>
+      <b>แนะนำ:</b><br>
+      · ส่งพบแพทย์เพื่อประเมิน OSA เพิ่มเติม<br>
+      · พิจารณาทำ PSQ-SRBD (22 ข้อ) เพื่อประเมินเชิงลึก<br>
+      · พิจารณาส่ง Polysomnography (PSG) หรือ Pulse oximetry overnight`;
+  } else if (count >= 1) {
+    cls    = 'cls-ob1';
+    badge  = '⚠️ ความเสี่ยงปานกลาง — ติดตามใกล้ชิด';
+    detail = `พบอาการ <b>${count}/5 ข้อ</b><br><br>
+      <b>แนะนำ:</b><br>
+      · แนะนำผู้ปกครองสังเกตอาการและบันทึก<br>
+      · ติดตามในการมาครั้งถัดไป<br>
+      · หากอาการไม่ดีขึ้นใน 1–2 เดือน ส่งพบแพทย์<br>
+      · สามารถทำ PSQ-SRBD เพื่อประเมินเพิ่มเติม`;
+  } else {
+    cls    = 'cls-healthy';
+    badge  = '✓ ความเสี่ยงต่ำ';
+    detail = `ไม่พบอาการที่น่าสงสัย (0/5 ข้อ)<br><br>
+      <b>แนะนำ:</b><br>
+      · คัดกรองซ้ำทุกครั้งที่มาร้านยา<br>
+      · แนะนำให้ผู้ปกครองสังเกตอาการนอนกรนต่อเนื่อง<br>
+      · ให้ความรู้เรื่องการจัดการน้ำหนักในเด็ก`;
+  }
+
+  const resEl = document.getElementById('sleep-assess-result');
+  resEl.style.display = 'block';
+  resEl.innerHTML = `
+    <div class="obese-result ${cls}">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:6px;">
+        ผลการประเมินปัญหาการนอน · พบ ${count}/5 ข้อ
+      </div>
+      <div class="obese-badge">${badge}</div>
+      <div class="obese-detail" style="margin-top:8px;">${detail}</div>
+    </div>`;
+  resEl.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function buildSnoringQuestions() {
