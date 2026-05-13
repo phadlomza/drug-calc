@@ -1063,6 +1063,22 @@
           <div style="font-size:13px;color:var(--t2);" id="pt-bar">—</div>
         </div>
 
+        <!-- Mode selector -->
+        <div class="card" style="padding:13px 16px;">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);margin-bottom:10px;">โหมดการคำนวณ</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <button id="btn-mode-obese" class="dchip on" onclick="setDoseMode('obese')" style="text-align:center;padding:10px 8px;">
+              🔴 Obese Peds<div class="ds">IBW / LBM / AdjBW</div>
+            </button>
+            <button id="btn-mode-gen" class="dchip" onclick="setDoseMode('gen')" style="text-align:center;padding:10px 8px;">
+              🟢 General Peds<div class="ds">TBW ปกติ</div>
+            </button>
+          </div>
+          <div id="dose-mode-label" style="font-size:13px;color:var(--t2);background:var(--s2);border-radius:var(--r);padding:7px 11px;">
+            🔴 Obese Peds — คำนวณด้วย IBW / LBM / AdjBW
+          </div>
+        </div>
+
         <div class="card">
           <div class="ct">เลือกยา</div>
           <div class="dtabs">
@@ -1093,7 +1109,7 @@
               <input type="number" id="inp-max" step="1" min="0" placeholder="เช่น 1000" inputmode="decimal">
             </div>
           </div>
-          <div class="fl">
+          <div class="fl" id="wt-selector-row">
             <label>น้ำหนักที่ใช้</label>
             <select id="inp-wt">
               <option value="lbm">LBM</option>
@@ -1152,6 +1168,14 @@
     <div class="wrap">
       <div class="card">
         <div class="ct">รายการยาทั้งหมด</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <button id="lbtn-obese" class="dchip on" onclick="setListMode('obese')" style="text-align:center;padding:9px;">
+            🔴 Obese Peds<div class="ds">IBW / LBM / AdjBW</div>
+          </button>
+          <button id="lbtn-gen" class="dchip" onclick="setListMode('gen')" style="text-align:center;padding:9px;">
+            🟢 General Peds<div class="ds">TBW ปกติ</div>
+          </button>
+        </div>
         <div class="dtabs">
           <button class="dtb on" onclick="lTab('lt-anti')">Antimicrobial</button>
           <button class="dtb" onclick="lTab('lt-analg')">Analgesic</button>
@@ -1340,6 +1364,95 @@
     };
 
     const WTLBL = { tbw: 'TBW', ibw: 'IBW', lbm: 'LBM', a03: 'AdjBW CF0.3', a04: 'AdjBW CF0.4', a045: 'AdjBW CF0.45' };
+
+    // ══ General Peds drug list (จากตารางยาเด็กทั่วไป)
+    const DRUGS_GEN = {
+      anti: [
+        { id: 'g_amox', n: 'Amoxicillin', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [20, 50], maxDose: 500,
+          forms: [{ l: 'Amox syrup 125mg/5ml', c: 25 }, { l: 'Amox syrup 250mg/5ml', c: 50 }],
+          note: '20–50 mg/kg/day แบ่ง 3 ครั้ง · max 500mg/dose · ทุก 8 ชม.' },
+        { id: 'g_azithro', n: 'Azithromycin', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [10, 10], maxDose: 500,
+          forms: [{ l: 'Azithromycin susp 200mg/5ml', c: 40 }],
+          note: '10 mg/kg/day ครั้งเดียว/วัน · max 500mg/dose' },
+        { id: 'g_cephalex', n: 'Cephalexin', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [25, 50], maxDose: 500,
+          forms: [{ l: 'Cephalexin syrup 125mg/5ml', c: 25 }, { l: 'Cephalexin syrup 250mg/5ml', c: 50 }],
+          note: '25–50 mg/kg/day แบ่ง 4 ครั้ง · max 4g/day' },
+        { id: 'g_cipro', n: 'Ciprofloxacin', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [30, 30], maxDose: 400,
+          forms: [{ l: 'Cipro susp 250mg/5ml', c: 50 }],
+          note: '⚠ อายุ > 6 ปีเท่านั้น · 30 mg/kg/day แบ่ง 2 ครั้ง · max 400mg/dose' },
+      ],
+      analg: [
+        { id: 'g_para', n: 'Paracetamol', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [10, 15], maxDose: 1000,
+          forms: [{ l: 'Para syrup 120mg/5ml', c: 24 }, { l: 'Para syrup 250mg/5ml', c: 50 }, { l: 'Para drop 100mg/ml', c: 100 }],
+          note: '10–15 mg/kg/dose · ทุก 4–6 ชม. · max 3g/day<br>✓ <b>G6PD:</b> ปลอดภัย ใช้ได้ปกติ',
+          g6pd: 'safe' },
+        { id: 'g_ibu', n: 'Ibuprofen', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [5, 10], maxDose: 400,
+          forms: [{ l: 'Ibu syrup 100mg/5ml', c: 20 }, { l: 'Ibu syrup 200mg/5ml', c: 40 }],
+          note: '5–10 mg/kg/dose · ทุก 6–8 ชม. · max 3g/day<br>⚠ <b>G6PD:</b> <span style="color:var(--red);font-weight:700;">ห้ามใช้ในผู้ป่วย G6PD</span>',
+          g6pd: 'avoid' },
+      ],
+      misc: [
+        { id: 'g_dompe', n: 'Domperidone', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [0.2, 0.4], maxDose: 10,
+          forms: [{ l: 'Domperidone 1mg/ml', c: 1 }],
+          note: '0.2–0.4 mg/kg/dose · 3 ครั้ง/วัน ก่อนอาหาร' },
+        { id: 'g_levopro', n: 'Levodropropizine', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [0.2, 0.2], maxDose: null,
+          forms: [{ l: 'Levodropropizine 6mg/ml', c: 6 }],
+          note: '0.2 mL/kg/dose · 3 ครั้ง/วัน' },
+        { id: 'g_carbocys', n: 'Carbocysteine', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [8, 10], maxDose: 250,
+          forms: [{ l: 'Carbocysteine syrup 125mg/5ml', c: 25 }, { l: 'Carbocysteine syrup 250mg/5ml', c: 50 }],
+          note: '8–10 mg/kg/dose · 3–4 ครั้ง/วัน' },
+        { id: 'g_cetiri', n: 'Cetirizine', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [0, 0], maxDose: 10,
+          forms: [{ l: 'Cetirizine syrup 5mg/5ml', c: 1 }],
+          note: 'อายุ 2–6 ปี: 5mg/day · อายุ > 6 ปี: 10mg/day · วันละครั้ง',
+          fixedDose: [{ label: 'อายุ 2–6 ปี', dose: 5, freq: 'วันละครั้ง' }, { label: 'อายุ > 6 ปี', dose: 10, freq: 'วันละครั้ง' }] },
+        { id: 'g_salbu', n: 'Salbutamol', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [0.1, 0.2], maxDose: 2,
+          forms: [{ l: 'Salbutamol syrup 2mg/5ml', c: 0.4 }],
+          note: '0.1–0.2 mg/kg/dose · 3–4 ครั้ง/วัน · max 2mg/dose' },
+        { id: 'g_terbu', n: 'Terbutaline', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [0.05, 0.05], maxDose: 0.05,
+          forms: [{ l: 'Terbutaline syrup 1.5mg/5ml', c: 0.3 }],
+          note: '0.05 mg/kg/dose · ทุก 6–8 ชม. · max 50 mcg/dose' },
+        { id: 'g_proca', n: 'Procaterol', wt: 'tbw', bc: 'b-tbw',
+          mgkg: [1.25, 1.25], maxDose: null,
+          forms: [{ l: 'Procaterol syrup 5mcg/ml', c: 0.005 }],
+          note: '1.25 mcg/kg/dose · ทุก 12 ชม.' },
+      ]
+    };
+
+    let doseMode = 'obese';
+    function getDrugs() { return doseMode === 'obese' ? DRUGS : DRUGS_GEN; }
+
+    function setDoseMode(m) {
+      doseMode = m; cur = null;
+      document.getElementById('btn-mode-obese').classList.toggle('on', m === 'obese');
+      document.getElementById('btn-mode-gen').classList.toggle('on', m === 'gen');
+      document.getElementById('dose-mode-label').textContent = m === 'obese'
+        ? '🔴 Obese Peds — คำนวณด้วย IBW / LBM / AdjBW'
+        : '🟢 General Peds — คำนวณด้วย TBW';
+      document.getElementById('wt-selector-row').style.display = m === 'obese' ? '' : 'none';
+      if (m === 'gen') document.getElementById('inp-wt').value = 'tbw';
+      buildChips();
+      document.getElementById('dose-res').classList.add('hidden');
+    }
+
+    function setListMode(m) {
+      doseMode = m; cur = null;
+      document.getElementById('lbtn-obese').classList.toggle('on', m === 'obese');
+      document.getElementById('lbtn-gen').classList.toggle('on', m === 'gen');
+      renderList();
+    }
+
     let sex = 'm', W = {}, ready = false, cur = null;
     const f2 = n => n.toFixed(2);
 
@@ -1421,17 +1534,19 @@
       ['anti', 'analg', 'misc'].forEach(cat => {
         const el = document.getElementById('ch-' + cat);
         el.innerHTML = '';
-        DRUGS[cat].forEach(d => {
+        getDrugs()[cat].forEach(d => {
           const wk = W[d.wt] ?? W.tbw;
+          const g6pdTag = d.g6pd === 'avoid'
+            ? '<span style="font-size:10px;color:var(--red);font-weight:700;"> ⚠G6PD</span>' : '';
           el.innerHTML += `<button class="dchip${cur && cur.id === d.id ? ' on' : ''}" onclick="pickDrug('${d.id}')">
-        ${d.n}<div class="ds">${WTLBL[d.wt]} = ${f2(wk)} kg</div></button>`;
+        ${d.n}${g6pdTag}<div class="ds">${WTLBL[d.wt]} = ${ready ? f2(wk) + ' kg' : '—'}</div></button>`;
         });
       });
     }
 
     function pickDrug(id) {
       let found = null;
-      ['anti', 'analg', 'misc'].forEach(c => { const d = DRUGS[c].find(x => x.id === id); if (d) found = d; });
+      ['anti', 'analg', 'misc'].forEach(c => { const d = getDrugs()[c].find(x => x.id === id); if (d) found = d; });
       if (!found) return;
       cur = found;
       buildChips();
@@ -1577,10 +1692,13 @@
       ['anti', 'analg', 'misc'].forEach(cat => {
         const tb = document.getElementById('lb-' + cat);
         tb.innerHTML = '';
-        DRUGS[cat].forEach(d => {
+        getDrugs()[cat].forEach(d => {
           const kg = ready ? (W[d.wt] ?? W.tbw) : null;
+          const g6pdTag = d.g6pd === 'avoid'
+            ? ' <span style="color:var(--red);font-size:12px;font-weight:700;">⚠ ห้ามใช้ G6PD</span>'
+            : d.g6pd === 'safe' ? ' <span style="color:var(--green);font-size:12px;">✓ G6PD ปลอดภัย</span>' : '';
           tb.innerHTML += `<tr>
-        <td><div class="dname">${d.n}</div>${d.note ? `<div class="dnote2">${d.note}</div>` : ''}</td>
+        <td><div class="dname">${d.n}${g6pdTag}</div>${d.note ? `<div class="dnote2">${d.note}</div>` : ''}</td>
         <td><span class="badge ${d.bc}">${WTLBL[d.wt]}</span></td>
         <td style="font-family:'IBM Plex Mono',monospace;font-size:13px;">${kg ? f2(kg) : '—'}</td>
         <td>${ready ? `<button class="calcbtn" onclick="goCalc('${d.id}')">คำนวณ</button>` : ''}</td>
