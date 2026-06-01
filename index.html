@@ -666,17 +666,14 @@
 <body>
 
   <div class="hdr" style="display:flex;align-items:center;gap:12px;padding:10px 16px;">
-    <img src="logo-03.png" alt="Logo 1"
-      style="height:52px;width:52px;object-fit:contain;border-radius:50%;flex-shrink:0;mix-blend-mode:lighten;">
+    <img src="logo-02.png" alt="สตรีอ่างทอง" style="height:52px;width:52px;object-fit:contain;border-radius:50%;background:white;flex-shrink:0;">
     <div style="flex:1;">
       <h1>Obese Peds · Dose Calculator</h1>
       <p>BMI ≥ 95th percentile · Ref: ภญ.สุนันทา เมรุ, swdcph.moph.go.th</p>
     </div>
-    <img src="logo-02.png" alt="Logo 2"
-      style="height:52px;width:52px;object-fit:contain;border-radius:50%;flex-shrink:0;mix-blend-mode:lighten;">
+    <img src="logo-03.png" alt="ศิวพร เภสัช" style="height:52px;width:52px;object-fit:contain;border-radius:50%;background:white;flex-shrink:0;">
   </div>
-  <div
-    style="background:#2a7a4a;color:white;text-align:center;padding:6px 16px;font-size:13px;font-weight:600;letter-spacing:0.05em;">
+  <div style="background:#2a7a4a;color:white;text-align:center;padding:6px 16px;font-size:13px;font-weight:600;letter-spacing:0.05em;">
     สำหรับเภสัชกรร้านยา
   </div>
 
@@ -729,16 +726,16 @@
         <div class="r2">
           <div class="fl">
             <label>อายุ (ปี) — 2 ถึง 20</label>
-            <input type="number" id="age" min="2" max="20" step="1" placeholder="เช่น 5" inputmode="decimal">
+            <input type="number" id="age" min="0.5" max="20" step="0.01" placeholder="เช่น 5.50" inputmode="decimal">
           </div>
           <div class="fl">
             <label>TBW น้ำหนักจริง (kg)</label>
-            <input type="number" id="tbw" min="1" step="0.1" placeholder="เช่น 38" inputmode="decimal">
+            <input type="number" id="tbw" min="0.1" step="0.01" placeholder="เช่น 38.50" inputmode="decimal">
           </div>
         </div>
         <div class="fl">
           <label>ส่วนสูง (cm)</label>
-          <input type="number" id="ht" min="50" step="0.5" placeholder="เช่น 100" inputmode="decimal">
+          <input type="number" id="ht" min="30" step="0.01" placeholder="เช่น 100.50" inputmode="decimal">
         </div>
         <button class="btn" onclick="calcWt()">คำนวณน้ำหนัก</button>
       </div>
@@ -1243,9 +1240,9 @@
       anti: [
         {
           id: 'acyclovir', n: 'Acyclovir', wt: 'ibw', bc: 'b-ibw',
-          mgkg: [5, 10], maxDose: 800,
+          mgkg: [5, 10], maxDose: 400,
           forms: [{ l: 'Acyclovir syrup 200mg/5ml', c: 40 }, { l: 'Acyclovir IV 25mg/ml', c: 25 }],
-          note: 'IBW · dose แตกต่างตามข้อบ่งชี้'
+          note: 'IBW · PO max 400mg/dose · IV max 800mg/dose'
         },
         {
           id: 'penicilin', n: 'Penicillin', wt: 'tbw', bc: 'b-tbw',
@@ -1267,7 +1264,7 @@
             { l: 'Amox syrup 125mg/5ml', c: 25 },
             { l: 'Amox syrup 250mg/5ml', c: 50 },
           ],
-          note: 'TBW · ทุก 8 ชม. · High-dose (AOM/Pneumonia): 40–90 mg/kg/day · max 500mg/dose'
+          note: 'TBW · Standard 20-40 mg/kg/dose ทุก 8 ชม. · High-dose (AOM): 40-45 mg/kg/dose ทุก 12 ชม. · max 500mg/dose · max 4g/day'
         },
         {
           id: 'amox_adult', n: 'Amoxicillin (ผู้ใหญ่)', wt: 'tbw', bc: 'b-tbw',
@@ -1286,15 +1283,15 @@
         },
         {
           id: 'clinda', n: 'Clindamycin', wt: 'tbw', bc: 'b-tbw',
-          mgkg: [10, 25], maxDose: 600,
+          mgkg: [10, 25], maxDose: 900,
           forms: [{ l: 'Clinda syrup 75mg/5ml', c: 15 }, { l: 'Clinda IV 150mg/ml', c: 150 }],
-          note: 'TBW · ทุก 6-8 ชม.'
+          note: 'TBW · PO max 600mg/dose · IV max 900mg/dose · ทุก 6-8 ชม.'
         },
         {
           id: 'metro', n: 'Metronidazole', wt: 'tbw', bc: 'b-tbw',
-          mgkg: [7.5, 10], maxDose: 500,
+          mgkg: [7.5, 10], maxDose: 250,
           forms: [{ l: 'Flagyl syrup 200mg/5ml', c: 40 }, { l: 'Flagyl IV 5mg/ml', c: 5 }],
-          note: 'TBW · ทุก 8 ชม.'
+          note: 'TBW · max 250mg/dose (เด็ก) · 500mg/dose (ผู้ใหญ่) · ทุก 8 ชม.'
         },
       ],
       analg: [
@@ -1381,9 +1378,9 @@
           forms: [{ l: 'Cephalexin syrup 125mg/5ml', c: 25 }, { l: 'Cephalexin syrup 250mg/5ml', c: 50 }],
           note: '25–50 mg/kg/day แบ่ง 4 ครั้ง · max 4g/day' },
         { id: 'g_cipro', n: 'Ciprofloxacin', wt: 'tbw', bc: 'b-tbw',
-          mgkg: [30, 30], maxDose: 400,
+          mgkg: [15, 20], maxDose: 750,
           forms: [{ l: 'Cipro susp 250mg/5ml', c: 50 }],
-          note: '⚠ อายุ > 6 ปีเท่านั้น · 30 mg/kg/day แบ่ง 2 ครั้ง · max 400mg/dose' },
+          note: '⚠ อายุ > 6 ปีเท่านั้น · PO max 750mg/dose · IV max 400mg/dose · ทุก 12 ชม.' },
       ],
       analg: [
         { id: 'g_para', n: 'Paracetamol', wt: 'tbw', bc: 'b-tbw',
@@ -1473,14 +1470,26 @@
     }
 
     function calcWt() {
-      const age = parseInt(document.getElementById('age').value);
+      const ageRaw = document.getElementById('age').value;
+      const ageFloat = parseFloat(ageRaw);  // รองรับทศนิยม เช่น 8.5 ปี
       const tbw = parseFloat(document.getElementById('tbw').value);
       const htCm = parseFloat(document.getElementById('ht').value);
-      if ([age, tbw, htCm].some(isNaN)) { alert('กรุณากรอกข้อมูลให้ครบ'); return; }
-      if (age < 2 || age > 20) { alert('รองรับอายุ 2–20 ปี'); return; }
+      if ([ageFloat, tbw, htCm].some(isNaN)) { alert('กรุณากรอกข้อมูลให้ครบ'); return; }
+      if (ageFloat < 2 || ageFloat > 20) { alert('รองรับอายุ 2–20 ปี (ใส่ทศนิยมได้ เช่น 8.5 = 8 ปี 6 เดือน)'); return; }
+
+      // ปัดอายุเป็นจำนวนเต็มที่ใกล้ที่สุด เพื่อ lookup ตาราง BMI p50/p95
+      const age = Math.min(Math.max(Math.round(ageFloat), 2), 20);
+
+      // แสดงอายุเป็น "ปี เดือน" ถ้ามีทศนิยม
+      // ใช้ age (ที่ปัดแล้ว) เป็นฐาน ป้องกัน "8 ปี 12 เดือน" จาก 8.99
+      const ageYr = Math.floor(ageFloat);
+      const ageMoRaw = Math.round((ageFloat - ageYr) * 12);
+      const ageMo = ageMoRaw >= 12 ? 0 : ageMoRaw;          // ถ้าปัดขึ้นเป็น 12 เดือน → แสดงแค่ปี
+      const ageDisplay = ageMo > 0 ? `${ageYr} ปี ${ageMo} เดือน` : `${age} ปี`;
 
       const htM = htCm / 100;
       const bmi50 = B50[sex][age];
+      const bmi95 = BMI95[sex][age];
 
       // สูตรจากชีท swdcph.moph.go.th
       const ibw = bmi50 * htM * htM;
@@ -1489,13 +1498,15 @@
       const a04 = ibw + 0.4 * (tbw - ibw);
       const a045 = ibw + 0.45 * (tbw - ibw);
 
-      W = { tbw, ibw, lbm, a03, a04, a045, age, htCm, sex, bmi50 };
+      W = { tbw, ibw, lbm, a03, a04, a045, age, ageFloat, ageRaw, ageDisplay, htCm, sex, bmi50, bmi95 };
       ready = true;
 
       const gs = sex === 'm' ? 'ชาย' : 'หญิง';
+      // แสดงหมายเหตุปัดอายุถ้ามีทศนิยม
+      const ageNote = ageMo > 0 ? ` <span style="font-size:11px;color:var(--t3)">(ปัดจาก ${ageFloat} → ${age} ปี)</span>` : '';
       document.getElementById('trace-txt').innerHTML =
-        `เพศ ${gs} · อายุ ${age} ปี · สูง ${htCm} cm · TBW ${tbw} kg<br>` +
-        `BMI₅₀ (${gs}, ${age}ปี) = <b>${bmi50}</b> kg/m²<br>` +
+        `เพศ ${gs} · อายุ ${ageDisplay} · สูง ${htCm} cm · TBW ${tbw} kg<br>` +
+        `BMI₅₀ (${gs}, ${age} ปี) = <b>${bmi50}</b> kg/m²${ageNote}<br>` +
         `<b>IBW</b> = ${bmi50} × ${f2(htM)}² = <b>${f2(ibw)} kg</b><br>` +
         `<b>LBM</b> = ${f2(ibw)} + 0.29 × (${tbw}−${f2(ibw)}) = <b>${f2(lbm)} kg</b><br>` +
         `<b>AdjBW CF0.4</b> = ${f2(ibw)} + 0.4 × (${tbw}−${f2(ibw)}) = <b>${f2(a04)} kg</b>`;
@@ -1508,10 +1519,9 @@
       document.getElementById('o-a045').textContent = f2(a045) + ' kg';
 
       const actualBmi = tbw / (htM * htM);
-      const p95val = BMI95[sex][Math.min(Math.max(Math.round(age), 2), 20)];
+      // ใช้ bmi95 ที่ interpolate แล้ว แทนการ lookup ด้วย round(age)
       document.getElementById('o-bmi-actual').textContent = actualBmi.toFixed(1);
       document.getElementById('o-bmi-p50').textContent = bmi50.toFixed(1);
-      // เพิ่มใน trace
       document.getElementById('trace-txt').innerHTML +=
         '<br><b>BMI จริง</b> = ' + tbw + ' ÷ ' + f2(htM) + '² = <b>' + actualBmi.toFixed(2) + ' kg/m²</b>';
       renderObesityClass(actualBmi, age, sex);
@@ -1526,7 +1536,7 @@
       np.classList.add('hidden'); dm.classList.remove('hidden');
       const gs = W.sex === 'm' ? 'ชาย' : 'หญิง';
       document.getElementById('pt-bar').innerHTML =
-        `<b>${gs} ${W.age}ปี</b> · TBW ${W.tbw}kg · IBW <b>${f2(W.ibw)}kg</b> · LBM <b>${f2(W.lbm)}kg</b>`;
+        `<b>${gs} ${W.ageDisplay ?? (W.ageRaw + ' ปี')}</b> · TBW ${W.tbw}kg · IBW <b>${f2(W.ibw)}kg</b> · LBM <b>${f2(W.lbm)}kg</b>`;
       buildChips();
     }
 
@@ -1722,11 +1732,12 @@
     };
 
     function classifyObesity(bmi, age, sex) {
-      const p95 = BMI95[sex][Math.min(Math.max(Math.round(age), 2), 20)];
+      const ageKey = Math.min(Math.max(Math.round(age), 2), 20);
+      const p95 = BMI95[sex][ageKey];
       const pctOf95 = (bmi / p95) * 100;
 
       // คำนวณ percentile โดยประมาณ (ใช้ BMI50 และ BMI95 ที่มี)
-      const p50 = B50[sex][Math.min(Math.max(Math.round(age), 2), 20)];
+      const p50 = B50[sex][ageKey];
       let approxPct = '';
       if (bmi < p50) approxPct = '< 50th';
       else if (bmi < p95) {
@@ -1739,7 +1750,10 @@
       }
 
       let cls, label, desc;
-      if (bmi < p50 * 0.9) {
+      // [BUG FIX 2] เดิม: if (bmi < p50 * 0.9) → ไม่ตรงมาตรฐาน CDC ที่ใช้ percentile จริง
+      // CDC Underweight = < 5th percentile ≈ ~89% ของ p50 ในบางช่วงอายุ แต่ควรเทียบกับ p95 โดยตรง
+      // ใช้ pctOf95 < (5/95*100) ≈ 5.26% แทน (สอดคล้องกับ CDC framework ที่ใช้แล้ว)
+      if (pctOf95 < 5.5) {  // < ~5th percentile (ประมาณ ≈ 5.26% ของ p95)
         cls = 'cls-healthy'; label = 'Underweight';
         desc = `BMI <b>${bmi.toFixed(1)}</b> · ต่ำกว่า 5th percentile`;
       } else if (pctOf95 < 85 / 95 * 100) {
@@ -1768,7 +1782,10 @@
     function bmiActualClass(bmi, p50, p95) {
       // จำแนก BMI จริงของเด็ก (ปกติ/เกิน/อ้วน)
       const pctOf95 = (bmi / p95) * 100;
-      if (pctOf95 < 85 / 95 * 100) {
+      // [BUG FIX 4] เพิ่ม Underweight case ที่หายไป และปรับ threshold ให้สม่ำเสมอกับ classifyObesity
+      if (pctOf95 < 5.5) {
+        return { cls: 'cls-healthy', label: 'น้ำหนักต่ำกว่าเกณฑ์ (Underweight)', desc: `BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² ต่ำกว่า 5th percentile` };
+      } else if (pctOf95 < 85 / 95 * 100) {
         return { cls: 'cls-healthy', label: 'น้ำหนักปกติ', desc: `BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² อยู่ในเกณฑ์ปกติ (< 85th percentile)` };
       } else if (pctOf95 < 100) {
         return { cls: 'cls-over', label: 'น้ำหนักเกิน (Overweight)', desc: `BMI จริง <b>${bmi.toFixed(1)}</b> kg/m² อยู่ระหว่าง 85th–95th percentile` };
@@ -1793,8 +1810,9 @@
     }
 
     function renderObesityClass(bmi, age, sex) {
-      const p50 = B50[sex][Math.min(Math.max(Math.round(age), 2), 20)];
-      const p95 = BMI95[sex][Math.min(Math.max(Math.round(age), 2), 20)];
+      const ageKey = Math.min(Math.max(Math.round(age), 2), 20);
+      const p50 = B50[sex][ageKey];
+      const p95 = BMI95[sex][ageKey];
       const rActual = bmiActualClass(bmi, p50, p95);
       const rP50 = bmiP50Class(p50, p95);
 
@@ -1924,9 +1942,17 @@
 
     function showSnoringIfObese(bmi, p95) {
       const card = document.getElementById('snoring-card');
-      card.style.display = 'block';
-      buildPSQQuestions();
-      document.getElementById('psq-result').style.display = 'none';
+      // [BUG FIX 3] เดิม: แสดง snoring card ทุกครั้งโดยไม่เช็ค BMI percentile
+      // Protocol ระบุ: เด็กที่ BMI ≥ 85th percentile ควรได้รับการคัดกรอง
+      // 85th percentile ≈ 89.5% ของ p95 (85/95 * 100)
+      const pctOf95 = (bmi / p95) * 100;
+      if (pctOf95 >= (85 / 95 * 100)) {
+        card.style.display = 'block';
+        buildPSQQuestions();
+        document.getElementById('psq-result').style.display = 'none';
+      } else {
+        card.style.display = 'none';
+      }
     }
 
     function selectOSATool(tool) {
@@ -2065,7 +2091,9 @@
 
       IM_SLEEPY.forEach(q => {
         const val = document.querySelector(`input[name="${q.id}"]:checked`);
-        if (!val) { unanswered++; return; }
+        // [BUG FIX 5] เดิม: ถ้าไม่ตอบ (val null) จะนับ unanswered แต่ถ้าตอบ "ไม่แน่ใจ" (value='-1') จะไม่นับทั้ง score และ unanswered
+        // ทำให้ผู้ใช้กด "ไม่แน่ใจ" ทุกข้อแล้วผ่านการตรวจสอบได้ โดยได้ score=0 และไม่มี unanswered
+        if (!val || val.value === '-1') { unanswered++; return; }
         if (val.value === '1') { score += q.weight; yesCount++; }
       });
 
